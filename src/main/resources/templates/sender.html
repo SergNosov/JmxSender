@@ -2,8 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>JMS Sender</title>
+    <link href="../static/css/bootstrap-4.5.0-dist/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/css/bootstrap-4.5.0-dist/css/bootstrap.min.css}"/>
+
+    <script src="../static/js/jquery-3.5.1.min.js"
+            th:src="@{/js/jquery-3.5.1.min.js}"></script>
 </head>
 <body>
-<h2> Hello JMS Sender</h2>
+<div class="container">
+    <h2> 121212 Hello JMS Sender</h2>
+</div>
+
+<div class="container" th:replace="fragments/footer :: footer">
+    <p>footer</p>
+</div>
 </body>
 </html>

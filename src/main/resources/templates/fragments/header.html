@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ru"
+>
+<head th:replace="fragments/headTag :: headTag"></head>
+<body>
+    <div class="container" th:fragment="header">
+        <div class="row">
+            <nav class="navbar navbar-light fixed-top bg-light">
+                <a class="navbar-brand" href="#">DocRepo</a>
+                <div id="logo-info">
+                    Единое хранилище <br>
+                    документов в электронном виде
+                </div>
+            </nav>
+        </div>
+    </div>
+</body>
+</html>

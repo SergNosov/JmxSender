@@ -2,30 +2,62 @@
 <html xmlns:th="http://www.thymeleaf.org"
       lang="ru"
 >
-<head th:replace="fragments/headTag :: headTag">
-</head>
+<head th:replace="fragments/headTag :: headTag"></head>
 <body>
-    <div class="container">
-        <nav class="navbar navbar-light fixed-top bg-light">
-            <span class="navbar-brand mb-0 h1">Репозиторий документов</span>
-        </nav>
+    <div th:replace="fragments/header :: header">
+        <p>
+            header
+        </p>
     </div>
 
     <div class="container">
         <div class="row">
-            <div class="col-md-2">
-            <h2>Новый документ</h2>
-            <div>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="inputLogin" placeholder="Пользователь" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" id="inputPassword" placeholder="Пароль" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block"id="enterBtn">Войти</button>
-                </form>
+            <div class="col-md-6" id="newDocument">
+                    <form id="loginForm" class="mt-20">
+                        <div class="mt-10">
+                            <label for="doctype">Тип документа</label>
+                            <input type="text" class="form-control" id="doctype" required>
+                        </div>
+                        <div class="row mt-10" >
+                            <div class="col-md-7">
+                                <label for="numDoc">Номер документа</label>
+                                <input type="text" class="form-control" id="numDoc" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="dateDoc">Дата документа</label>
+                                <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required>
+                            </div>
+                        </div>
+                        <div class="mt-10">
+                            <label for="title">Заголовок</label>
+                            <input type="text" class="form-control" id="title" required>
+                        </div>
+                        <div class="mt-10">
+                            <label for="content">Краткое содержание</label>
+                            <textarea type="text" class="form-control" id="content" rows="3"></textarea>
+                        </div>
+                        <div class="mt-10">
+                            <label for="sender">Подпись</label>
+                            <input type="text" class="form-control" id="sender" required>
+                        </div>
+                        <div class="custom-file mt-10">
+                            <input type="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Загрузить файл</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-secondary btn-block mt-20" id="enterBtn">Отправить</button>
+                    </form>
             </div>
+            <div class="col-md-6" id="documents">
+                <table class="mt-20">
+                    <tr>
+                        <th>Документ</th>
+                        <th>Номер</th>
+                        <th>Дата</th>
+                        <th>Заголовок</th>
+                    </tr>
+                    <tr></tr>
+                </table>
             </div>
         </div>
     </div>

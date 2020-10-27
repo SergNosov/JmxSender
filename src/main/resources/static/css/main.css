@@ -1,12 +1,9 @@
 body{
     padding-top: 70px;
 }
-input:focus {
-    outline-color: #5a6268;
-}
 
-#documents{
-    border: 1px solid #E5E5E5;
+.mt-50{
+    margin-top: 50px;
 }
 
 .mt-20{

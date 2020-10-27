@@ -17,7 +17,7 @@
                         <div class="mt-10">
                             <label for="doctype">Тип документа</label>
                             <input type="text" class="form-control" id="doctype" required
-                                   th:field="*{doctype}">
+                                   th:field="*{doctype.title}">
                         </div>
                         <div class="row mt-10" >
                             <div class="col-md-7">
@@ -45,7 +45,7 @@
                         <div class="mt-10">
                             <label for="sender">Подпись</label>
                             <input type="text" class="form-control" id="sender" required
-                                   th:field="*{sender}">
+                                   th:field="*{sender.title}">
                         </div>
                         <div class="custom-file mt-10">
                             <input type="file" class="custom-file-input" id="customFile">
@@ -56,14 +56,19 @@
                     </form>
             </div>
             <div class="col-md-6" id="documents">
-                <table class="mt-20">
+                <table class="table table-bordered mt-50">
                     <tr>
-                        <th>Документ</th>
-                        <th>Номер</th>
+                        <th scope="col">Документ</th>
+                        <th scope="col">Номер</th>
                         <th>Дата</th>
                         <th>Заголовок</th>
                     </tr>
-                    <tr></tr>
+                    <tr th:each="document: ${documentDtoList}">
+                        <td th:text="${document.doctype.title}"></td>
+                        <td th:text="${document.number}"></td>
+                        <td th:text="${document.docDate}"></td>
+                        <td th:text="${document.title}"></td>
+                    </tr>
                 </table>
             </div>
         </div>

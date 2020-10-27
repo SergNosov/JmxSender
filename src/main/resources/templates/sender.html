@@ -13,32 +13,39 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6" id="newDocument">
-                    <form id="loginForm" class="mt-20">
+                    <form id="loginForm" class="mt-20" th:object="${newDocument}" th:action="@{/sender}" method="post">
                         <div class="mt-10">
                             <label for="doctype">Тип документа</label>
-                            <input type="text" class="form-control" id="doctype" required>
+                            <input type="text" class="form-control" id="doctype" required
+                                   th:field="*{doctype}">
                         </div>
                         <div class="row mt-10" >
                             <div class="col-md-7">
                                 <label for="numDoc">Номер документа</label>
-                                <input type="text" class="form-control" id="numDoc" required>
+                                <input type="text" class="form-control" id="numDoc" required
+                                       th:field="*{number}">
                             </div>
                             <div class="col-md-4">
                                 <label for="dateDoc">Дата документа</label>
-                                <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required>
+                                <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required
+                                       th:field="*{docDate}">
                             </div>
                         </div>
                         <div class="mt-10">
                             <label for="title">Заголовок</label>
-                            <input type="text" class="form-control" id="title" required>
+                            <input type="text" class="form-control" id="title" required
+                                   th:field="*{title}">
                         </div>
                         <div class="mt-10">
                             <label for="content">Краткое содержание</label>
-                            <textarea type="text" class="form-control" id="content" rows="3"></textarea>
+                            <textarea type="text" class="form-control" id="content" rows="3"
+                                      th:field="*{content}">
+                            </textarea>
                         </div>
                         <div class="mt-10">
                             <label for="sender">Подпись</label>
-                            <input type="text" class="form-control" id="sender" required>
+                            <input type="text" class="form-control" id="sender" required
+                                   th:field="*{sender}">
                         </div>
                         <div class="custom-file mt-10">
                             <input type="file" class="custom-file-input" id="customFile">

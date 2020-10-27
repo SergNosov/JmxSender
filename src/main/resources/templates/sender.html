@@ -4,78 +4,78 @@
 >
 <head th:replace="fragments/headTag :: headTag"></head>
 <body>
-    <div th:replace="fragments/header :: header">
-        <p>
-            header
-        </p>
-    </div>
+<div th:replace="fragments/header :: header">
+    <p>
+        header
+    </p>
+</div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6" id="newDocument">
-                    <form id="loginForm" class="mt-20" th:object="${newDocument}" th:action="@{/sender}" method="post">
-                        <div class="mt-10">
-                            <label for="doctype">Тип документа</label>
-                            <input type="text" class="form-control" id="doctype" required
-                                   th:field="*{doctype.title}">
-                        </div>
-                        <div class="row mt-10" >
-                            <div class="col-md-7">
-                                <label for="numDoc">Номер документа</label>
-                                <input type="text" class="form-control" id="numDoc" required
-                                       th:field="*{number}">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="dateDoc">Дата документа</label>
-                                <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required
-                                       th:field="*{docDate}">
-                            </div>
-                        </div>
-                        <div class="mt-10">
-                            <label for="title">Заголовок</label>
-                            <input type="text" class="form-control" id="title" required
-                                   th:field="*{title}">
-                        </div>
-                        <div class="mt-10">
-                            <label for="content">Краткое содержание</label>
-                            <textarea type="text" class="form-control" id="content" rows="3"
-                                      th:field="*{content}">
+<div class="container">
+    <div class="row">
+        <div class="col-md-6" id="newDocument">
+            <form id="loginForm" class="mt-20" th:object="${newDocument}" th:action="@{/submit}" method="post">
+                <div class="mt-10">
+                    <label for="doctype">Тип документа</label>
+                    <input type="text" class="form-control" id="doctype" required
+                           th:field="*{doctype.title}">
+                </div>
+                <div class="row mt-10">
+                    <div class="col-md-7">
+                        <label for="numDoc">Номер документа</label>
+                        <input type="text" class="form-control" id="numDoc" required
+                               th:field="*{number}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="dateDoc">Дата документа</label>
+                        <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required
+                               th:field="*{docDate}">
+                    </div>
+                </div>
+                <div class="mt-10">
+                    <label for="title">Заголовок</label>
+                    <input type="text" class="form-control" id="title" required
+                           th:field="*{title}">
+                </div>
+                <div class="mt-10">
+                    <label for="content">Краткое содержание</label>
+                    <textarea type="text" class="form-control" id="content" rows="3"
+                              th:field="*{content}">
                             </textarea>
-                        </div>
-                        <div class="mt-10">
-                            <label for="sender">Подпись</label>
-                            <input type="text" class="form-control" id="sender" required
-                                   th:field="*{sender.title}">
-                        </div>
-                        <div class="custom-file mt-10">
-                            <input type="file" class="custom-file-input" id="customFile">
-                            <label class="custom-file-label" for="customFile">Загрузить файл</label>
-                        </div>
+                </div>
+                <div class="mt-10">
+                    <label for="sender">Подпись</label>
+                    <input type="text" class="form-control" id="sender" required
+                           th:field="*{sender.title}">
+                </div>
+                <div class="custom-file mt-10">
+                    <input type="file" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile">Загрузить файл</label>
+                </div>
 
-                        <button type="submit" class="btn btn-secondary btn-block mt-20" id="enterBtn">Отправить</button>
-                    </form>
-            </div>
-            <div class="col-md-6" id="documents">
-                <table class="table table-bordered mt-50">
-                    <tr>
-                        <th scope="col">Документ</th>
-                        <th scope="col">Номер</th>
-                        <th>Дата</th>
-                        <th>Заголовок</th>
-                    </tr>
-                    <tr th:each="document: ${documentDtoList}">
-                        <td th:text="${document.doctype.title}"></td>
-                        <td th:text="${document.number}"></td>
-                        <td th:text="${document.docDate}"></td>
-                        <td th:text="${document.title}"></td>
-                    </tr>
-                </table>
-            </div>
+                <button type="submit" class="btn btn-secondary btn-block mt-20" id="submitBtn">Отправить</button>
+            </form>
+        </div>
+        <div class="col-md-6" id="documents">
+            <table class="table table-bordered mt-50">
+                <tr>
+                    <th scope="col">Документ</th>
+                    <th scope="col">Номер</th>
+                    <th>Дата</th>
+                    <th>Заголовок</th>
+                </tr>
+                <tr th:each="document: ${documentDtoList}">
+                    <td th:text="${document.doctype.title}"></td>
+                    <td th:text="${document.number}"></td>
+                    <td th:text="${document.docDate}"></td>
+                    <td th:text="${document.title}"></td>
+                </tr>
+            </table>
         </div>
     </div>
+</div>
 
-    <div th:replace="fragments/footer :: footer">
-        <p>footer</p>
-    </div>
+<div th:replace="fragments/footer :: footer">
+    <p>footer</p>
+</div>
 </body>
 </html>

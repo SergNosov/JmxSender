@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ru"
+>
+<head th:replace="fragments/headTag :: headTag"></head>
+<body>
+    <div th:replace="fragments/header :: header">
+        <p>
+            header
+        </p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <h1> SenderOk!</h1>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer">
+        <p>footer</p>
+    </div>
+</body>
+</html>

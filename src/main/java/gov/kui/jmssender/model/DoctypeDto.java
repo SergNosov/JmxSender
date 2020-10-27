@@ -1,4 +1,4 @@
-package gov.kui.jmssender.model.dto;
+package gov.kui.jmssender.model;
 
 import lombok.Data;
 

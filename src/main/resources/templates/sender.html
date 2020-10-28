@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6" id="newDocument">
-            <form id="loginForm" class="mt-20" th:object="${documentDto}" th:action="@{/showForm}" action="#" method="post">
+            <form id="loginForm" class="mt-20" th:object="${documentDto}" th:action="@{/sender}" action="#" method="post">
 
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                     <p>Error Message</p>
@@ -22,19 +22,19 @@
                 <div class="mt-10">
                     <label for="doctype">Тип документа</label>
                     <input type="text" class="form-control" id="doctype" required
-                           th:field="*{doctype.title}">
+                           th:field="*{doctype.title}"/>
                 </div>
                 <div class="row mt-10">
                     <div class="col-md-7">
                         <label for="numDoc">Номер документа</label>
-                        <input type="text" class="form-control" id="numDoc"
-                               th:field="*{number}">
+                        <input type="text" class="form-control" id="numDoc" required
+                               th:field="*{number}"/>
                         <label th:if="${#fields.hasErrors('number')}" th:errors="*{number}">number Error</label>
                     </div>
                     <div class="col-md-4">
                         <label for="dateDoc">Дата документа</label>
                         <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required
-                               th:field="*{docDate}">
+                               th:field="*{docDate}"/>
                     </div>
                 </div>
                 <div class="mt-10">
@@ -51,10 +51,10 @@
                 <div class="mt-10">
                     <label for="sender">Подпись</label>
                     <input type="text" class="form-control" id="sender" required
-                           th:field="*{sender.title}">
+                           th:field="*{sender.title}"/>
                 </div>
                 <div class="custom-file mt-10">
-                    <input type="file" class="custom-file-input" id="customFile">
+                    <input type="file" class="custom-file-input" id="customFile"/>
                     <label class="custom-file-label" for="customFile">Загрузить файл</label>
                 </div>
 

@@ -18,15 +18,15 @@ public class JmsController {
 
     private List<DocumentDto> documentDtoList = new ArrayList<>();
 
-    @GetMapping({"/","/showForm"})
-    public String startPage(Model model){
+    @GetMapping({"/", "/sender"})
+    public String startPage(Model model) {
         model.addAttribute("documentDto", new DocumentDto());
         model.addAttribute("documentDtoList", documentDtoList);
         return "sender";
     }
 
-    @PostMapping("/showForm")
-    public String  submitDocument(@Valid DocumentDto documentDto, BindingResult bindingResult, Model model){
+    @PostMapping("/sender")
+    public String submitDocument(@Valid DocumentDto documentDto, BindingResult bindingResult, Model model) {
 
         if (!bindingResult.hasErrors()) {
             documentDtoList.add(documentDto);

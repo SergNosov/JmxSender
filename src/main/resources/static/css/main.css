@@ -1,14 +1,19 @@
-body{
+body {
     padding-top: 70px;
 }
 
-.mt-50{
+.mt-50 {
     margin-top: 50px;
 }
 
-.mt-20{
+.mt-20 {
     margin-top: 20px;
 }
-.mt-10{
+
+.mt-10 {
     margin-top: 10px;
+}
+
+.err-validation {
+    color: red;
 }

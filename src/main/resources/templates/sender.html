@@ -14,11 +14,6 @@
     <div class="row">
         <div class="col-md-6" id="newDocument">
             <form id="loginForm" class="mt-20" th:object="${documentDto}" th:action="@{/sender}" action="#" method="post">
-
-                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-                    <p>Error Message</p>
-                </div>
-
                 <div class="mt-10">
                     <label for="doctype">Тип документа</label>
                     <input type="text" class="form-control" id="doctype" required
@@ -26,11 +21,12 @@
                 </div>
                 <div class="row mt-10">
                     <div class="col-md-7">
-                        <label for="numDoc">Номер документа</label>
-                        <input type="text" class="form-control" id="numDoc" required
-                               th:field="*{number}"/>
-                        <label th:if="${#fields.hasErrors('number')}" th:errors="*{number}">number Error</label>
-                    </div>
+                         <label for="numDoc">Номер документа</label>
+                         <input type="text" class="form-control" id="numDoc" required
+                                th:field="*{number}" />
+                            <label class="err-validation"
+                                   th:if="${#fields.hasErrors('number')}" th:errors="*{number}">number Error</label>
+                     </div>
                     <div class="col-md-4">
                         <label for="dateDoc">Дата документа</label>
                         <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required

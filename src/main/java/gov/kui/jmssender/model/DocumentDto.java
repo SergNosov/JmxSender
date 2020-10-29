@@ -6,10 +6,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-public class DocumentDto {
+public class DocumentDto implements Serializable {
+    private static final long serialVersionUID = -5505354011800084672L;
+
     private int id;
 
     @NotBlank(message = "Не указан номер документа.")

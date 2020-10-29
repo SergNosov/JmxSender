@@ -1,7 +1,9 @@
 package gov.kui.jmssender.controller;
 
+import gov.kui.jmssender.dao.DocumentDtoRepository;
 import gov.kui.jmssender.model.DocumentDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,19 +11,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @Slf4j
 public class JmsController {
 
-    private List<DocumentDto> documentDtoList = new ArrayList<>();
+    private final DocumentDtoRepository documentRepository;
+
+    @Autowired
+    public JmsController(DocumentDtoRepository documentRepository) {
+        this.documentRepository = documentRepository;
+    }
 
     @GetMapping({"/", "/sender"})
     public String startPage(Model model) {
         model.addAttribute("documentDto", new DocumentDto());
-        model.addAttribute("documentDtoList", documentDtoList);
+        model.addAttribute("documentDtoList", documentRepository.getAllDtos());
         return "sender";
     }
 
@@ -31,9 +36,9 @@ public class JmsController {
         System.out.println("documentDto: "+documentDto);
 
         if (!bindingResult.hasErrors()) {
-            documentDtoList.add(documentDto);
+            documentRepository.addDto(documentDto);
         }
-        model.addAttribute("documentDtoList", documentDtoList);
+        model.addAttribute("documentDtoList", documentRepository.getAllDtos());
 
         return "sender";
     }

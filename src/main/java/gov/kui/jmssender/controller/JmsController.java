@@ -28,6 +28,8 @@ public class JmsController {
     @PostMapping("/sender")
     public String submitDocument(@Valid DocumentDto documentDto, BindingResult bindingResult, Model model) {
 
+        System.out.println("documentDto: "+documentDto);
+
         if (!bindingResult.hasErrors()) {
             documentDtoList.add(documentDto);
         }

@@ -18,6 +18,10 @@
                     <label for="doctype">Тип документа</label>
                     <input type="text" class="form-control" id="doctype" required
                            th:field="*{doctype.title}"/>
+                    <label class="err-validation"
+                           th:if="${#fields.hasErrors('doctype')}" th:errors="*{doctype}">doctype Error</label>
+                    <label class="err-validation"
+                           th:if="${#fields.hasErrors('doctype.title')}" th:errors="*{doctype.title}">doctype.title Error</label>
                 </div>
                 <div class="row mt-10">
                     <div class="col-md-7">
@@ -31,12 +35,16 @@
                         <label for="dateDoc">Дата документа</label>
                         <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required
                                th:field="*{docDate}"/>
+                        <label class="err-validation"
+                               th:if="${#fields.hasErrors('docDate')}" th:errors="*{docDate}">docDate Error</label>
                     </div>
                 </div>
                 <div class="mt-10">
                     <label for="title">Заголовок</label>
                     <input type="text" class="form-control" id="title" required
                            th:field="*{title}">
+                    <label class="err-validation"
+                           th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</label>
                 </div>
                 <div class="mt-10">
                     <label for="content">Краткое содержание</label>
@@ -48,6 +56,10 @@
                     <label for="sender">Подпись</label>
                     <input type="text" class="form-control" id="sender" required
                            th:field="*{sender.title}"/>
+                    <label class="err-validation"
+                           th:if="${#fields.hasErrors('sender')}" th:errors="*{sender}">sender Error</label>
+                    <label class="err-validation"
+                           th:if="${#fields.hasErrors('sender.title')}" th:errors="*{sender.title}">sender.title Error</label>
                 </div>
                 <div class="custom-file mt-10">
                     <input type="file" class="custom-file-input" id="customFile"/>

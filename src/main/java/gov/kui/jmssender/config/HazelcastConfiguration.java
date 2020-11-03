@@ -47,14 +47,9 @@ public class HazelcastConfiguration {
     }
 
     @Bean
-    public IMap<Long, DocumentDto> hazelcastDocumentDtoMap(@Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance){
-        IMap<Long, DocumentDto> documentDtoIMap = hazelcastInstance.getMap(hzIMapName);
+    public IMap<String, DocumentDto> hazelcastDocumentDtoMap(@Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance){
+        IMap<String, DocumentDto> documentDtoIMap = hazelcastInstance.getMap(hzIMapName);
         return documentDtoIMap;
-    }
-
-    @Bean
-    public FlakeIdGenerator hazelcastFlakeIdGenerator(@Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance){
-        return hazelcastInstance.getFlakeIdGenerator("idGen");
     }
 
     @Autowired

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,12 +41,21 @@ public class DocumentDtoRepositoryImpl implements DocumentDtoRepository {
                 .append(";")
                 .append(documentDto.getDocDate())
                 .toString();
+        //todo разобраться...
+        //hazelcastDocumentDtoMap.put(keyDto, documentDto);
 
-        if (hazelcastDocumentDtoMap.get(keyDto) == null) {
-            hazelcastDocumentDtoMap.put(keyDto, documentDto);
+        DocumentDto documentDtoClone = hazelcastDocumentDtoMap.put(keyDto, documentDto);
+        if (documentDtoClone == null) {
+            return Optional.of(hazelcastDocumentDtoMap.get(keyDto));
         }
-// todo решить вопрос с лишними вызовами get
-        return Optional.of(hazelcastDocumentDtoMap.get(keyDto));
+        return Optional.of(documentDtoClone);
+//
+//        DocumentDto documentDtoClone = hazelcastDocumentDtoMap.get(keyDto);
+//
+//        if (documentDtoClone == null) {
+//            hazelcastDocumentDtoMap.put(keyDto, documentDto);
+//            return Optional.of(hazelcastDocumentDtoMap.get(keyDto));
+//        }
     }
 
     @Override

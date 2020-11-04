@@ -24,8 +24,47 @@ public class DocumentDtoRepositoryImpl implements DocumentDtoRepository {
     }
 
     @Override
-    public Optional<DocumentDto> addDto(final DocumentDto documentDto) {
+    public Optional<DocumentDto> addDto(final DocumentDto documentDto) {// todo может void?
+        checkDocumentDto(documentDto);
+        final String keyDto = generateKey(documentDto);
+        putDtoToMap(keyDto,documentDto);
+        return Optional.of(documentDto);
 
+//todo  посчитать и сравнить количество оращений в map
+        //вариант 1
+//        DocumentDto documentDtoClone = hazelcastDocumentDtoMap.put(keyDto, documentDto);
+//        if (documentDtoClone == null) {
+//            return Optional.of(hazelcastDocumentDtoMap.get(keyDto));
+//        }
+//        return Optional.of(documentDtoClone);
+//
+//        DocumentDto documentDtoClone = hazelcastDocumentDtoMap.get(keyDto);
+//
+//        if (documentDtoClone == null) {
+//            hazelcastDocumentDtoMap.put(keyDto, documentDto);
+//            return Optional.of(hazelcastDocumentDtoMap.get(keyDto));
+//        }
+    }
+
+    private void putDtoToMap(String keyDto, DocumentDto documentDto) {
+        Assert.notNull(documentDto, "документ при записи в IMap не может быть null");
+        Assert.notNull(keyDto, "ключь(key) при записи в IMap не может быть null");
+
+        if (!hazelcastDocumentDtoMap.containsKey(keyDto)){
+            hazelcastDocumentDtoMap.put(keyDto, documentDto);
+        }
+    }
+
+    private String generateKey(DocumentDto documentDto) {
+        return new StringBuilder(documentDto.getDoctype().getTitle())
+                    .append(";")
+                    .append(documentDto.getNumber())
+                    .append(";")
+                    .append(documentDto.getDocDate())
+                    .toString();
+    }
+
+    private void checkDocumentDto(DocumentDto documentDto) {
         Assert.notNull(documentDto, "документ не может быть null");
         Assert.notNull(documentDto.getDoctype(), "Не указан тип документа.");
         Assert.hasText(documentDto.getDoctype().getTitle(), "Не указан заголовок документа.");
@@ -34,28 +73,6 @@ public class DocumentDtoRepositoryImpl implements DocumentDtoRepository {
         Assert.hasText(documentDto.getDocDate().toString(), "Не указана дата документа");
         Assert.notNull(documentDto.getSender(), "Не указана сторона подписания (null).");
         Assert.hasText(documentDto.getSender().getTitle(), "Не указана сторона подписания (title).");
-
-        String keyDto = new StringBuilder(documentDto.getDoctype().getTitle())
-                .append(";")
-                .append(documentDto.getNumber())
-                .append(";")
-                .append(documentDto.getDocDate())
-                .toString();
-        //todo разобраться...
-        //hazelcastDocumentDtoMap.put(keyDto, documentDto);
-
-        DocumentDto documentDtoClone = hazelcastDocumentDtoMap.put(keyDto, documentDto);
-        if (documentDtoClone == null) {
-            return Optional.of(hazelcastDocumentDtoMap.get(keyDto));
-        }
-        return Optional.of(documentDtoClone);
-//
-//        DocumentDto documentDtoClone = hazelcastDocumentDtoMap.get(keyDto);
-//
-//        if (documentDtoClone == null) {
-//            hazelcastDocumentDtoMap.put(keyDto, documentDto);
-//            return Optional.of(hazelcastDocumentDtoMap.get(keyDto));
-//        }
     }
 
     @Override

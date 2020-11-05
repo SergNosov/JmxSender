@@ -2,6 +2,7 @@ package gov.kui.jmssender.controller;
 
 import gov.kui.jmssender.dao.DocumentDtoRepository;
 import gov.kui.jmssender.model.DocumentDto;
+import gov.kui.jmssender.service.DocumentDtoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,17 +17,17 @@ import javax.validation.Valid;
 @Slf4j
 public class JmsController {
 
-    private final DocumentDtoRepository documentRepository;
+    private final DocumentDtoService documentDtoService;
 
     @Autowired
-    public JmsController(DocumentDtoRepository documentRepository) {
-        this.documentRepository = documentRepository;
+    public JmsController(DocumentDtoService documentDtoService) {
+        this.documentDtoService = documentDtoService;
     }
 
     @GetMapping({"/", "/sender"})
     public String startPage(Model model) {
         model.addAttribute("documentDto", new DocumentDto());
-        model.addAttribute("documentDtoList", documentRepository.getAllDtos());
+        model.addAttribute("documentDtoList", documentDtoService.getAllDtos());
         return "sender";
     }
 
@@ -34,9 +35,9 @@ public class JmsController {
     public String submitDocument(@Valid DocumentDto documentDto, BindingResult bindingResult, Model model) {
 
         if (!bindingResult.hasErrors()) {
-            documentRepository.addDto(documentDto);
+            documentDtoService.sendDto(documentDto);
         }
-        model.addAttribute("documentDtoList", documentRepository.getAllDtos());
+        model.addAttribute("documentDtoList", documentDtoService.getAllDtos());
 
         return "sender";
     }

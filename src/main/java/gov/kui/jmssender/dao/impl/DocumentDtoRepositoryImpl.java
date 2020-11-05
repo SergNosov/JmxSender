@@ -19,38 +19,12 @@ public class DocumentDtoRepositoryImpl implements DocumentDtoRepository {
     }
 
     @Override
-    public void addDto(final DocumentDto documentDto) {
-        checkDocumentDto(documentDto);
-        final String keyDto = generateKey(documentDto);
-        putDtoToMap(keyDto,documentDto);
-    }
-
-    private void checkDocumentDto(final DocumentDto documentDto) {
-        Assert.notNull(documentDto, "документ не может быть null");
-        Assert.notNull(documentDto.getDoctype(), "Не указан тип документа.");
-        Assert.hasText(documentDto.getDoctype().getTitle(), "Не указан заголовок документа.");
-        Assert.hasText(documentDto.getNumber(), "Не указан номер документа.");
-        Assert.notNull(documentDto.getDocDate(), "Не указана дата документа (null)");
-        Assert.hasText(documentDto.getDocDate().toString(), "Не указана дата документа");
-        Assert.notNull(documentDto.getSender(), "Не указана сторона подписания (null).");
-        Assert.hasText(documentDto.getSender().getTitle(), "Не указана сторона подписания (title).");
-    }
-
-    private String generateKey(final DocumentDto documentDto) {
-        return new StringBuilder(documentDto.getDoctype().getTitle())
-                .append(";")
-                .append(documentDto.getNumber())
-                .append(";")
-                .append(documentDto.getDocDate())
-                .toString();
-    }
-
-    private void putDtoToMap(final String keyDto, final DocumentDto documentDto) {
+    public void addDtoToMap(final String key, final DocumentDto documentDto) {
         Assert.notNull(documentDto, "документ при записи в IMap не может быть null");
-        Assert.notNull(keyDto, "ключь(key) при записи в IMap не может быть null");
+        Assert.notNull(key, "ключь(key) при записи в IMap не может быть null");
 
-        if (!hazelcastDocumentDtoMap.containsKey(keyDto)){
-            hazelcastDocumentDtoMap.put(keyDto, documentDto);
+        if (!hazelcastDocumentDtoMap.containsKey(key)){
+            hazelcastDocumentDtoMap.put(key, documentDto);
         }
     }
 

@@ -5,6 +5,6 @@ import gov.kui.jmssender.model.DocumentDto;
 import java.util.List;
 
 public interface DocumentDtoRepository {
-    public void addDto(DocumentDto documentDto);
+    public void addDtoToMap(String key, DocumentDto documentDto);
     public List<DocumentDto> getAllDtos();
 }

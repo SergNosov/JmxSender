@@ -1,6 +1,5 @@
 package gov.kui.jmssender.controller;
 
-import gov.kui.jmssender.dao.DocumentDtoRepository;
 import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.service.DocumentDtoService;
 import lombok.extern.slf4j.Slf4j;

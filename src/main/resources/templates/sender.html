@@ -12,8 +12,8 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6" id="newDocument">
-            <form id="loginForm" class="mt-20" th:object="${documentDto}" th:action="@{/sender}" action="#" method="post">
+        <div class="col-md-6" id="newDocumentDto">
+            <form id="newDocumentDtoForm" class="mt-20" th:object="${documentDto}" th:action="@{/sender}" action="#" method="post">
                 <div class="mt-10">
                     <label for="doctype">Тип документа</label>
                     <input type="text" class="form-control" id="doctype" required

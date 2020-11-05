@@ -25,7 +25,9 @@ public class DocumentDtoRepositoryImpl implements DocumentDtoRepository {
 
         if (!hazelcastDocumentDtoMap.containsKey(key)){
             hazelcastDocumentDtoMap.put(key, documentDto);
-        } else {throw new RuntimeException("documentDto alredy in map");}
+        } else {
+            throw new RuntimeException("documentDto alredy in map"); //todo перенести проверку наличия в отдельны метод
+        }
     }
 
     @Override

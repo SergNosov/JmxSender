@@ -5,8 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Arrays;
-
 @Slf4j
 @ControllerAdvice
 public class CommonExceptionHandler {
@@ -21,7 +19,7 @@ public class CommonExceptionHandler {
 
         model.addAttribute("errorMessage", message);
 
-        return "error";
+        return "errorpage";
     }
 
     private void logginException(Exception ex) {

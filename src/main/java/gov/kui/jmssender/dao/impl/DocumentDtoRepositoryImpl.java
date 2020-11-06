@@ -21,17 +21,21 @@ public class DocumentDtoRepositoryImpl implements DocumentDtoRepository {
     @Override
     public void addDtoToMap(final String key, final DocumentDto documentDto) {
         Assert.notNull(documentDto, "документ при записи в IMap не может быть null");
-        Assert.notNull(key, "ключь(key) при записи в IMap не может быть null");
+        Assert.notNull(key, "ключ(key) при записи в IMap не может быть null");
 
-        if (!hazelcastDocumentDtoMap.containsKey(key)){
+        if (!this.existsByKey(key)){
             hazelcastDocumentDtoMap.put(key, documentDto);
-        } else {
-            throw new RuntimeException("documentDto alredy in map"); //todo перенести проверку наличия в отдельны метод
         }
     }
 
     @Override
     public List<DocumentDto> getAllDtos() {
         return List.copyOf(hazelcastDocumentDtoMap.values());
+    }
+
+    @Override
+    public boolean existsByKey(final String key) {
+        Assert.notNull(key, "existsByKey: ключ(key) не может быть null.");
+        return hazelcastDocumentDtoMap.containsKey(key);
     }
 }

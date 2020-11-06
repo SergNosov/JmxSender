@@ -22,7 +22,9 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
     @Override
     public void sendDto(final DocumentDto documentDto) {
         this.checkDocumentDto(documentDto);
-        documentDtoRepository.addDtoToMap(this.generateKey(documentDto), documentDto);
+        if (!documentDtoRepository.existsByKey(this.generateKey(documentDto))) { // todo возвращать optional? если пустой, значит такой элемент в карте есть
+            documentDtoRepository.addDtoToMap(this.generateKey(documentDto), documentDto);
+        }
     }
 
     @Override

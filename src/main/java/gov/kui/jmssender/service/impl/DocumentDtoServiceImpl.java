@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DocumentDtoServiceImpl implements DocumentDtoService {
@@ -20,10 +21,16 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
     }
 
     @Override
-    public void sendDto(final DocumentDto documentDto) {
+    public Optional<DocumentDto> sendDto(final DocumentDto documentDto) {
         this.checkDocumentDto(documentDto);
-        if (!documentDtoRepository.existsByKey(this.generateKey(documentDto))) { // todo возвращать optional? если пустой, значит такой элемент в карте есть
-            documentDtoRepository.addDtoToMap(this.generateKey(documentDto), documentDto);
+
+        final String key = this.generateKey(documentDto);
+
+        if (!documentDtoRepository.existsByKey(key)) {
+            documentDtoRepository.addDtoToMap(key, documentDto);
+            return Optional.of(documentDto);
+        } else {
+            return Optional.empty();
         }
     }
 

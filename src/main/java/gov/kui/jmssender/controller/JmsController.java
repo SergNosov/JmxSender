@@ -34,12 +34,12 @@ public class JmsController {
     public String submitDocument(@Valid DocumentDto documentDto, BindingResult bindingResult, Model model) {
 
         if (!bindingResult.hasErrors()) {
-            documentDtoService.sendDto(documentDto);
+            if (documentDtoService.sendDto(documentDto).isEmpty()) {
+                model.addAttribute("status", "Внимание! Документ с такими реквизитами отправлен ранее.");
+            }
         }
+
         model.addAttribute("documentDtoList", documentDtoService.getAllDtos());
-
-        model.addAttribute("status", "double sending");
-
         return "sender";
     }
 }

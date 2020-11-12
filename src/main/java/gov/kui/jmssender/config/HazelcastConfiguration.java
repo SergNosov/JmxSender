@@ -7,7 +7,6 @@ import com.hazelcast.config.ListConfig;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.flakeidgen.FlakeIdGenerator;
 import com.hazelcast.map.IMap;
 import gov.kui.jmssender.model.DocumentDto;
 import org.springframework.beans.factory.annotation.Autowired;

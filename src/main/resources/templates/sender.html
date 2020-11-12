@@ -13,6 +13,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6" id="newDocumentDto">
+            <div th:if="${status != null}" class="alert alert-warning col-md-12" id="status">
+                <p th:text="${status}">статус</p>
+            </div>
+
             <form id="newDocumentDtoForm" class="mt-20" th:object="${documentDto}" th:action="@{/sender}" action="#" method="post">
                 <div class="mt-10">
                     <label for="doctype">Тип документа</label>
@@ -91,5 +95,17 @@
 <div th:replace="fragments/footer :: footer">
     <p>footer</p>
 </div>
+
+<script th:inline="javascript">
+    const inputText = document.getElementById('doctype');
+
+    inputText.oninput = function () {
+        const statusDiv = document.getElementById('status');
+
+        if (statusDiv != null) {
+          statusDiv.parentElement.removeChild(statusDiv);
+        }
+    }
+</script>
 </body>
 </html>

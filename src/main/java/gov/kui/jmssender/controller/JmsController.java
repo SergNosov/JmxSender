@@ -38,6 +38,8 @@ public class JmsController {
         }
         model.addAttribute("documentDtoList", documentDtoService.getAllDtos());
 
+        model.addAttribute("status", "double sending");
+
         return "sender";
     }
 }

@@ -21,7 +21,9 @@
                 <div class="mt-10">
                     <label for="doctype">Тип документа</label>
                     <input type="text" class="form-control" id="doctype" required
-                           th:field="*{doctype.title}"/>
+                           th:field="*{doctype.title}"
+                           th:oninput="removeDiv()"
+                    />
                     <label class="err-validation"
                            th:if="${#fields.hasErrors('doctype')}" th:errors="*{doctype}">doctype Error</label>
                     <label class="err-validation"
@@ -31,14 +33,18 @@
                     <div class="col-md-7">
                          <label for="numDoc">Номер документа</label>
                          <input type="text" class="form-control" id="numDoc" required
-                                th:field="*{number}" />
+                                th:field="*{number}"
+                                th:oninput="removeDiv()"
+                         />
                             <label class="err-validation"
                                    th:if="${#fields.hasErrors('number')}" th:errors="*{number}">number Error</label>
                      </div>
                     <div class="col-md-4">
                         <label for="dateDoc">Дата документа</label>
                         <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required
-                               th:field="*{docDate}"/>
+                               th:field="*{docDate}"
+                               th:oninput="removeDiv()"
+                        />
                         <label class="err-validation"
                                th:if="${#fields.hasErrors('docDate')}" th:errors="*{docDate}">docDate Error</label>
                     </div>
@@ -46,7 +52,7 @@
                 <div class="mt-10">
                     <label for="title">Заголовок</label>
                     <input type="text" class="form-control" id="title" required
-                           th:field="*{title}">
+                           th:field="*{title}"/>
                     <label class="err-validation"
                            th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</label>
                 </div>
@@ -96,16 +102,7 @@
     <p>footer</p>
 </div>
 
-<script th:inline="javascript">
-    const inputText = document.getElementById('doctype');
-
-    inputText.oninput = function () {
-        const statusDiv = document.getElementById('status');
-
-        if (statusDiv != null) {
-          statusDiv.parentElement.removeChild(statusDiv);
-        }
-    }
-</script>
+<script src="../static/js/jmssender.js"
+        th:src="@{/js/jmssender.js}"></script>
 </body>
 </html>

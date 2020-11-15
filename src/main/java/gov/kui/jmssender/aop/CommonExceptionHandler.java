@@ -24,6 +24,6 @@ public class CommonExceptionHandler {
 
     private void logginException(Exception ex) {
         log.error("--- exception: " + ex.getMessage());
-       // Arrays.stream(ex.getStackTrace()).forEach(el -> log.error("--- stackTrace: " + el));
+        //Arrays.stream(ex.getStackTrace()).forEach(el -> log.error("--- stackTrace: " + el));
     }
 }

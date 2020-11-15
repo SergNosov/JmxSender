@@ -1,6 +1,7 @@
 package gov.kui.jmssender.service.impl;
 
 import gov.kui.jmssender.dao.DocumentDtoRepository;
+import gov.kui.jmssender.service.JmsProducer;
 import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.service.DocumentDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class DocumentDtoServiceImpl implements DocumentDtoService {
 
     private final DocumentDtoRepository documentDtoRepository;
+    private final JmsProducer jmsProducer;
 
     @Autowired
-    public DocumentDtoServiceImpl(DocumentDtoRepository documentDtoRepository) {
+    public DocumentDtoServiceImpl(DocumentDtoRepository documentDtoRepository, JmsProducer jmsProducer) {
         this.documentDtoRepository = documentDtoRepository;
+        this.jmsProducer = jmsProducer;
     }
 
     @Override
@@ -27,6 +30,9 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
         final String key = this.generateKey(documentDto);
 
         if (!documentDtoRepository.existsByKey(key)) {
+
+            jmsProducer.send(documentDto);
+
             documentDtoRepository.addDtoToMap(key, documentDto);
             return Optional.of(documentDto);
         } else {

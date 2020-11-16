@@ -1,7 +1,6 @@
 package gov.kui.jmssender.service.impl;
 
 import gov.kui.jmssender.dao.DocumentDtoRepository;
-import gov.kui.jmssender.service.JmsProducer;
 import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.service.DocumentDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,31 +12,28 @@ import java.util.Optional;
 
 @Service
 public class DocumentDtoServiceImpl implements DocumentDtoService {
-
     private final DocumentDtoRepository documentDtoRepository;
-    private final JmsProducer jmsProducer;
 
     @Autowired
-    public DocumentDtoServiceImpl(DocumentDtoRepository documentDtoRepository, JmsProducer jmsProducer) {
+    public DocumentDtoServiceImpl(DocumentDtoRepository documentDtoRepository ) {
         this.documentDtoRepository = documentDtoRepository;
-        this.jmsProducer = jmsProducer;
     }
 
     @Override
-    public Optional<DocumentDto> sendDto(final DocumentDto documentDto) {
+    public Optional<DocumentDto> addDto(final DocumentDto documentDto) {
         this.checkDocumentDto(documentDto);
 
-        final String key = this.generateKey(documentDto);
-
-        if (!documentDtoRepository.existsByKey(key)) {
-
-            jmsProducer.send(documentDto);
-
-            documentDtoRepository.addDtoToMap(key, documentDto);
+        if (!this.isExists(documentDto)) {
+            documentDtoRepository.addDtoToMap(documentDto);
             return Optional.of(documentDto);
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public boolean isExists(DocumentDto documentDto) {
+        return documentDtoRepository.existsByKey(documentDto);
     }
 
     @Override
@@ -54,14 +50,5 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
         Assert.hasText(documentDto.getDocDate().toString(), "Не указана дата документа");
         Assert.notNull(documentDto.getSender(), "Не указана сторона подписания (null).");
         Assert.hasText(documentDto.getSender().getTitle(), "Не указана сторона подписания (title).");
-    }
-
-    private String generateKey(final DocumentDto documentDto) {
-        return new StringBuilder(documentDto.getDoctype().getTitle())
-                .append(";")
-                .append(documentDto.getNumber())
-                .append(";")
-                .append(documentDto.getDocDate())
-                .toString();
     }
 }

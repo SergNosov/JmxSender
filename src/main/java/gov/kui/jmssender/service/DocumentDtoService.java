@@ -7,17 +7,19 @@ import java.util.Optional;
 
 public interface DocumentDtoService {
     /**
-     * используется для отправки DTO-объекта брокеру сообщений.
+     * используется для добавления DTO-объекта во временное хранилище переданных DTO.
      *
-     *@param documentDto DTO-объект для отправки брокеру сообщений.
-     *@return Optional<DocumentDto>, если возвращаемое значение isEmpty() - то такой DTO-объекта отправлялся ранее.
+     *@param documentDto DTO-объект для сохранения.
+     *@return Optional<DocumentDto>, если возвращаемое значение isEmpty() - то такой DTO-объект сохранялся ранее.
      */
-    public Optional<DocumentDto> sendDto(DocumentDto documentDto);
+    public Optional<DocumentDto> addDto(DocumentDto documentDto);
 
     /**
-     * используется для получение списка DTO-объектов отправленных через брокер сообщений.
+     * используется для получения из временного хранилища списка DTO-объектов сохраненных ранее.
      *
-     *@return список DTO-объектов отправленных через брокер сообщений.
+     *@return список DTO-объектов сохраненных ранее.
      */
     public List<DocumentDto> getAllDtos();
+
+    public boolean isExists(DocumentDto documentDto);
 }

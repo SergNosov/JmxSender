@@ -40,7 +40,10 @@ public class JmsController {
     public String submitDocument(@Valid DocumentDto documentDto, BindingResult bindingResult, Model model) {
 
         if (!bindingResult.hasErrors()) {
-            if (documentDtoService.addDto(documentDto).isEmpty()) {
+
+            boolean messageIsSending = jmsSenderService.sendMessage(documentDto).isEmpty();
+
+            if (messageIsSending) {
                 model.addAttribute("status", "Внимание! Документ с такими реквизитами отправлен ранее.");
             }
         }

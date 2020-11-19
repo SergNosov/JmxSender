@@ -16,13 +16,10 @@ import javax.validation.Valid;
 @Controller
 @Slf4j
 public class JmsController {
-    private final DocumentDtoService documentDtoService;
     private final JmsSenderService jmsSenderService;
 
     @Autowired
-    public JmsController(DocumentDtoService documentDtoService,
-                         JmsSenderService jmsSenderService) {
-        this.documentDtoService = documentDtoService;
+    public JmsController(JmsSenderService jmsSenderService) {
         this.jmsSenderService = jmsSenderService;
     }
 
@@ -31,7 +28,7 @@ public class JmsController {
         jmsSenderService.isJmsAlive();
 
         model.addAttribute("documentDto", new DocumentDto());
-        model.addAttribute("documentDtoList", documentDtoService.getAllDtos());
+        model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());
 
         return "sender";
     }
@@ -48,7 +45,7 @@ public class JmsController {
             }
         }
 
-        model.addAttribute("documentDtoList", documentDtoService.getAllDtos());
+        model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());
         return "sender";
     }
 }

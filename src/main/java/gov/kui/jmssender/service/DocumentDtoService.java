@@ -7,19 +7,25 @@ import java.util.Optional;
 
 public interface DocumentDtoService {
     /**
-     * используется для добавления DTO-объекта во временное хранилище переданных DTO.
+     * используется для сохранения DTO-объекта в хранилище переданных DTO.
      *
      *@param documentDto DTO-объект для сохранения.
      *@return Optional<DocumentDto>, если возвращаемое значение isEmpty() - то такой DTO-объект сохранялся ранее.
      */
-    public Optional<DocumentDto> addDto(DocumentDto documentDto);
+    public Optional<DocumentDto> save(DocumentDto documentDto);
 
     /**
-     * используется для получения из временного хранилища списка DTO-объектов сохраненных ранее.
+     * используется для получения списка DTO-объектов сохраненных ранее.
      *
      *@return список DTO-объектов сохраненных ранее.
      */
     public List<DocumentDto> getAllDtos();
 
+    /**
+     * используется для проверки наличия DTO-объекта в хранилище переданных DTO.
+     *
+     *@return true - DTO объект присутствует в хранилище (сохранялся ранее),
+     * false - DTO объекта в хранилище нет.
+     */
     public boolean isExists(DocumentDto documentDto);
 }

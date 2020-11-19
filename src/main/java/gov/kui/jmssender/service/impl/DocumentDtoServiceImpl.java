@@ -20,11 +20,11 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
     }
 
     @Override
-    public Optional<DocumentDto> addDto(final DocumentDto documentDto) {
+    public Optional<DocumentDto> save(final DocumentDto documentDto) {
         this.checkDocumentDto(documentDto);
 
         if (!this.isExists(documentDto)) {
-            documentDtoRepository.addDtoToMap(documentDto);
+            documentDtoRepository.save(documentDto);
             return Optional.of(documentDto);
         } else {
             return Optional.empty();
@@ -33,7 +33,8 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
 
     @Override
     public boolean isExists(DocumentDto documentDto) {
-        return documentDtoRepository.existsByKey(documentDto);
+        Assert.notNull(documentDto, "documentDto не может быть null");
+        return documentDtoRepository.isExists(documentDto);
     }
 
     @Override

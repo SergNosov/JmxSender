@@ -17,7 +17,11 @@
                 <p th:text="${status}">статус</p>
             </div>
 
-            <form id="newDocumentDtoForm" class="mt-20" th:object="${documentDto}" th:action="@{/sender}" action="#" method="post">
+            <form id="newDocumentDtoForm" class="mt-20"
+                  th:object="${documentDto}"
+                  th:action="@{/sender}"
+                  th:method="post"
+            >
                 <div class="mt-10">
                     <label for="doctype">Тип документа</label>
                     <input type="text" class="form-control" id="doctype" required

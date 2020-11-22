@@ -1,7 +1,6 @@
 package gov.kui.jmssender.controller;
 
 import gov.kui.jmssender.model.DocumentDto;
-import gov.kui.jmssender.service.DocumentDtoService;
 import gov.kui.jmssender.service.JmsSenderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +37,9 @@ public class JmsController {
 
         if (!bindingResult.hasErrors()) {
 
-            boolean messageIsSending = jmsSenderService.sendMessage(documentDto).isEmpty();
+            boolean alreadySent = jmsSenderService.sendMessage(documentDto).isEmpty();
 
-            if (messageIsSending) {
+            if (alreadySent) {
                 model.addAttribute("status", "Внимание! Документ с такими реквизитами отправлен ранее.");
             }
         }

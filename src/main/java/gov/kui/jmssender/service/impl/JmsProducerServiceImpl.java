@@ -41,14 +41,15 @@ public class JmsProducerServiceImpl implements JmsProducerService {
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add("origin", "http://localhost:8161");
-            httpHeaders.setOrigin("http://localhost:8161");
+         //   httpHeaders.set("origin", "http://localhost");
+          //  httpHeaders.setOrigin("http://localhost:8161");
+            httpHeaders.setOrigin("http://localhost");
             httpHeaders.setBasicAuth("root", "root");
 
             ResponseEntity<String> responseEntity = restTemplate.exchange(
-                    "http://localhost:8161/console/jolokia/list",
+                    "http://localhost:8161/console/jolokia",
                     HttpMethod.GET,
-                    new HttpEntity<>(httpHeaders),
+                    new HttpEntity<String>(httpHeaders),
                     String.class);
 
             log.info("--- headers: " + httpHeaders);

@@ -68,12 +68,17 @@
                 </div>
                 <div class="mt-10">
                     <label for="sender">Подпись</label>
-                    <input type="text" class="form-control" id="sender" required
-                           th:field="*{sender.title}"/>
-                    <label class="err-validation"
-                           th:if="${#fields.hasErrors('sender')}" th:errors="*{sender}">sender Error</label>
-                    <label class="err-validation"
-                           th:if="${#fields.hasErrors('sender.title')}" th:errors="*{sender.title}">sender.title Error</label>
+                    <div>
+                        <button type="button" class="btn-sm btn-secondary">Добавить</button>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control" id="sender" required
+                               th:field="*{sender.title}"/>
+                        <label class="err-validation"
+                               th:if="${#fields.hasErrors('sender')}" th:errors="*{sender}">sender Error</label>
+                        <label class="err-validation"
+                               th:if="${#fields.hasErrors('sender.title')}" th:errors="*{sender.title}">sender.title Error</label>
+                    </div>
                 </div>
                 <div class="custom-file mt-10">
                     <input type="file" class="custom-file-input" id="customFile"/>

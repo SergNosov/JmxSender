@@ -24,11 +24,22 @@ import javax.jms.JMSException;
 public class JmsProducerServiceImpl implements JmsProducerService {
     private final JmsTemplate jmsTemplate;
     private final String destinationQueue;
+    private final String artemisHost;
+    private final String login;
+    private final String password;
 
     @Autowired
-    public JmsProducerServiceImpl(JmsTemplate jmsTemplate, @Value("${jms.queue.destination}") String destinationQueue) {
+    public JmsProducerServiceImpl(JmsTemplate jmsTemplate,
+                                  @Value("${jms.queue.destination}") String destinationQueue,
+                                  @Value ("${artemis.host}") String artemisHost,
+                                  @Value ("${artemis.user}") String login,
+                                  @Value ("${artemis.password}") String password
+    ) {
         this.jmsTemplate = jmsTemplate;
         this.destinationQueue = destinationQueue;
+        this.artemisHost = artemisHost;
+        this.login = login;
+        this.password = password;
     }
 
     public void send(DocumentDto documentDto){
@@ -38,34 +49,25 @@ public class JmsProducerServiceImpl implements JmsProducerService {
 
     public void  isJmsAlive(){
         try {
-            RestTemplate restTemplate = new RestTemplate();
-
-            HttpHeaders httpHeaders = new HttpHeaders();
-         //   httpHeaders.set("origin", "http://localhost");
-          //  httpHeaders.setOrigin("http://localhost:8161");
-            httpHeaders.setOrigin("http://localhost");
-            httpHeaders.setBasicAuth("root", "root");
+            final RestTemplate restTemplate = new RestTemplate();
 
             ResponseEntity<String> responseEntity = restTemplate.exchange(
-                    "http://localhost:8161/console/jolokia",
+                    artemisHost+":8161/console/jolokia",
                     HttpMethod.GET,
-                    new HttpEntity<String>(httpHeaders),
+                    new HttpEntity<String>(setHttpHeaders()),
                     String.class);
 
-            log.info("--- headers: " + httpHeaders);
-            log.info("--- origin: " + httpHeaders.getOrigin());
-            log.info("---status: " + responseEntity.getStatusCode());
-            log.info("--- !!!! " + responseEntity.getBody());
+            log.info("---ActiveMQ Artemis status: " + responseEntity.getStatusCode());
         } catch (ResourceAccessException conEx){
             log.info("--- Нет связи с брокером сообщений ActiveMQ Artemis: " + conEx.getMessage());
             throw new RuntimeException("--- Нет связи с брокером сообщений ActiveMQ Artemis.");
         }
+    }
 
-//        try (Connection con = jmsTemplate.getConnectionFactory().createConnection()){
-//            log.info("--- con: "+con.getMetaData().getJMSProviderName());
-//        } catch (JMSException jmsEx) {
-//            log.error("--- jmsEx: "+jmsEx);
-//            throw new RuntimeException(jmsEx);
-//        }
+    private HttpHeaders setHttpHeaders() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setOrigin(artemisHost);
+        httpHeaders.setBasicAuth(login, password);
+        return httpHeaders;
     }
 }

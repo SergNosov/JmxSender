@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.jms.Connection;
-import javax.jms.JMSException;
-
 @Slf4j
 @Service
 @PropertySource("classpath:application.properties")
@@ -58,6 +55,7 @@ public class JmsProducerServiceImpl implements JmsProducerService {
                     String.class);
 
             log.info("---ActiveMQ Artemis status: " + responseEntity.getStatusCode());
+            log.info("---ActiveMQ Artemis request body: " + responseEntity.getBody());
         } catch (ResourceAccessException conEx){
             log.info("--- Нет связи с брокером сообщений ActiveMQ Artemis: " + conEx.getMessage());
             throw new RuntimeException("--- Нет связи с брокером сообщений ActiveMQ Artemis.");
@@ -65,6 +63,8 @@ public class JmsProducerServiceImpl implements JmsProducerService {
     }
 
     private HttpHeaders setHttpHeaders() {
+        //С целью решения проблемы с заголовком Origin указать JVM аргумент:
+        //-Dsun.net.http.allowRestrictedHeaders=true
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setOrigin(artemisHost);
         httpHeaders.setBasicAuth(login, password);

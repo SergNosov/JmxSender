@@ -17,3 +17,7 @@ body {
 .err-validation {
     color: red;
 }
+
+#addSender {
+    margin-left: 25px;
+}

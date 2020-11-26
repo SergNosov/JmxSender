@@ -6,33 +6,24 @@ function removeDiv() {
     }
 }
 
-function addSenderInput(){
-    console.log("-----click");
+function addSenderInput() {
     let parentDiv = document.getElementById("senders");
     let childDiv = document.getElementsByClassName("oneSender").item(0).cloneNode(true);
 
-    let buttonDel = document.createElement('button')
-    buttonDel.textContent = "Удалить"
-    buttonDel.type = "button";
-    buttonDel.className = "btn-sm btn-secondary";
-    childDiv.appendChild(buttonDel);
+    parentDiv.append(childDiv);
 
-    // let buttonDel = childDiv.getElementById("buttonDel")
-    // buttonDel.hidden = false;
-     parentDiv.append(childDiv);
+    buttonSetVisible(document.getElementsByClassName("oneSender"));
+}
 
-    // let div = document.createElement('div');
-    // div.className = "oneSender";
-    // div.className = "mt-10";
-    //
-    // let input = document.createElement('input');
-    // input.type = "text";
-    // input.className="form-control";
-    // input.required = true;
-    //
-    // div.append(input);
-    //
-    // console.log("----- div:"+div);
-    //parentDiv.append(div);
+function buttonSetVisible(elements) {
+    for (let i = 0; i < elements.length; i++) {
+        if (i != 0) {
+            let buttonDel = elements[i].querySelector('button');
+            buttonDel.hidden = false;
+        }
+    }
+}
 
+function deleteParent(){
+    console.log("--- deleteParent");
 }

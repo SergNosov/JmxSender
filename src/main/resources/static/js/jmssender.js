@@ -10,7 +10,16 @@ function addSenderInput(){
     console.log("-----click");
     let parentDiv = document.getElementById("senders");
     let childDiv = document.getElementsByClassName("oneSender").item(0).cloneNode(true);
-    parentDiv.append(childDiv);
+
+    let buttonDel = document.createElement('button')
+    buttonDel.textContent = "Удалить"
+    buttonDel.type = "button";
+    buttonDel.className = "btn-sm btn-secondary";
+    childDiv.appendChild(buttonDel);
+
+    // let buttonDel = childDiv.getElementById("buttonDel")
+    // buttonDel.hidden = false;
+     parentDiv.append(childDiv);
 
     // let div = document.createElement('div');
     // div.className = "oneSender";

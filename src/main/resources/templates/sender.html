@@ -84,7 +84,7 @@
                         <div class="oneSender mt-10">
                             <input type="text" class="form-control" required
                                    th:field="*{sender.title}"/>
-                            <button type="button" class="btn-sm btn-secondary">Удалить</button>
+<!--                            <button type="button" class="btn-sm btn-secondary" hidden="true" id="buttonDel">Удалить</button>-->
                             <label class="err-validation"
                                    th:if="${#fields.hasErrors('sender')}" th:errors="*{sender}">sender Error</label>
                             <label class="err-validation"

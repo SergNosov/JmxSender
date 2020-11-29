@@ -6,7 +6,7 @@ function removeDiv() {
     }
 }
 
-function addSenderInput() {
+function addSenderInput1() {
     let parentDiv = document.getElementById("senders");
     let childDiv = document.getElementsByClassName("oneSender").item(0).cloneNode(true);
 

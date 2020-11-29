@@ -75,31 +75,23 @@
                         <div class="col-md-2">
                             <button type="button"
                                     class="btn-sm btn-secondary"
-                                    id="addSender"
-                                    onclick="addSenderInput()">
+                                    id="btnAddSender">
+<!--                                    onclick="addSenderInput()">-->
                                 Добавить
                             </button>
                         </div>
                     </div>
                     <div class="mt-10" id="senders">
-                        <div class="row oneSender mt-10">
-                            <div class="col-md-10">
-                                <input type="text" class="form-control" required
-                                       th:field="*{sender.title}"/>
-                                <label class="err-validation"
-                                       th:if="${#fields.hasErrors('sender')}" th:errors="*{sender}">sender Error</label>
-                                <label class="err-validation"
-                                       th:if="${#fields.hasErrors('sender.title')}" th:errors="*{sender.title}">sender.title
-                                    Error</label>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button"
-                                        class="btn-sm btn-secondary"
-                                        hidden="true"
-                                        onclick="deleteParent()">
-                                    Удалить
-                                </button>
-                            </div>
+                        <div class="row oneSender mt-10" id="sender0">
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" required
+                                           th:field="*{sender.title}"/>
+                                    <label class="err-validation"
+                                           th:if="${#fields.hasErrors('sender')}" th:errors="*{sender}">sender Error</label>
+                                    <label class="err-validation"
+                                           th:if="${#fields.hasErrors('sender.title')}" th:errors="*{sender.title}">sender.title
+                                        Error</label>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -136,7 +128,9 @@
     <p>footer</p>
 </div>
 
-<script src="../static/js/jmssender.js"
-        th:src="@{/js/jmssender.js}"></script>
+<!--<script src="../static/js/jmssender.js"-->
+<!--        th:src="@{/js/jmssender.js}"></script>-->
+<script src="../static/js/jmsSenderJq.js"
+        th:src="@{/js/jmsSenderJq.js}"></script>
 </body>
 </html>

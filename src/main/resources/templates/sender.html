@@ -76,33 +76,32 @@
                             <button type="button"
                                     class="btn-sm btn-secondary"
                                     id="btnAddSender">
-<!--                                    onclick="addSenderInput()">-->
                                 Добавить
                             </button>
                         </div>
                     </div>
                     <div class="mt-10" id="senders">
                         <div class="row oneSender mt-10" id="sender0">
-                                <div class="col-md-10">
-                                    <input type="text" class="form-control" required
-                                           th:field="*{sender.title}"/>
-                                    <label class="err-validation"
-                                           th:if="${#fields.hasErrors('sender')}" th:errors="*{sender}">sender Error</label>
-                                    <label class="err-validation"
-                                           th:if="${#fields.hasErrors('sender.title')}" th:errors="*{sender.title}">sender.title
-                                        Error</label>
-                                </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" required
+                                       th:field="*{sender.title}"/>
+                                <label class="err-validation"
+                                       th:if="${#fields.hasErrors('sender')}" th:errors="*{sender}">sender Error</label>
+                                <label class="err-validation"
+                                       th:if="${#fields.hasErrors('sender.title')}" th:errors="*{sender.title}">sender.title
+                                    Error</label>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class=" custom-file mt-10
                                 ">
-                                <input type="file" class="custom-file-input" id="customFile"/>
-                                <label class="custom-file-label" for="customFile">Загрузить файл</label>
-                            </div>
+                    <input type="file" class="custom-file-input" id="customFile"/>
+                    <label class="custom-file-label" for="customFile">Загрузить файл</label>
+                </div>
 
-                            <button type="submit" class="btn btn-secondary btn-block mt-20" id="submitBtn">Отправить
-                            </button>
+                <button type="submit" class="btn btn-secondary btn-block mt-20" id="submitBtn">Отправить
+                </button>
             </form>
         </div>
         <div class="col-md-6" id="documents">

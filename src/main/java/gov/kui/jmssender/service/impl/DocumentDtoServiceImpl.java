@@ -49,7 +49,7 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
         Assert.hasText(documentDto.getNumber(), "Не указан номер документа.");
         Assert.notNull(documentDto.getDocDate(), "Не указана дата документа (null)");
         Assert.hasText(documentDto.getDocDate().toString(), "Не указана дата документа");
-        Assert.notNull(documentDto.getSender(), "Не указана сторона подписания (null).");
-        Assert.hasText(documentDto.getSender().getTitle(), "Не указана сторона подписания (title).");
+        Assert.notNull(documentDto.getSenders(), "Не указана сторона подписания (null).");
+        Assert.isTrue(documentDto.getSenders().isEmpty(), "Не указана сторона подписания (title).");
     }
 }

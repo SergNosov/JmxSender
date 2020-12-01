@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class DocumentDto implements Serializable {
@@ -33,5 +35,5 @@ public class DocumentDto implements Serializable {
 
     @Valid
     @NotNull(message = "Не указана сторона подписания.")
-    private SenderDto sender;
+    private List<SenderDto> senders =  new ArrayList<>();
 }

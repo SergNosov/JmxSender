@@ -81,15 +81,13 @@
                         </div>
                     </div>
                     <div class="mt-10" id="senders" th:each="item, stat: *{senders}">
-                        <p th:text="*{senders[__${stat.index}__].title}"></p>
                         <div class="row oneSender mt-10" id="sender0">
                             <div class="col-md-10">
+<!--                                <p th:text="*{senders[__${stat.index}__].title}"></p>-->
                                 <input type="text" class="form-control" required
                                        th:field="*{senders[__${stat.index}__].title}"/>
-<!--                                       th:field="*{senders[__$[stat.index]__].title}"/>-->
-<!--                                       th:field="${sender.title}"/>-->
 <!--                                <label class="err-validation"-->
-<!--                                       th:if="${#fields.hasErrors('sender')}" th:errors="*{sender}">sender Error</label>-->
+<!--                                       th:if="${#fields.hasErrors('senders')}" th:errors="*{senders}">sender Error</label>-->
 <!--                                <label class="err-validation"-->
 <!--                                       th:if="${#fields.hasErrors('sender.title')}" th:errors="*{sender.title}">sender.title-->
 <!--                                    Error</label>-->

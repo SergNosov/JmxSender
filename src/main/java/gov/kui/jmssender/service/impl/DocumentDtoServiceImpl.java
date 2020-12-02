@@ -3,6 +3,7 @@ package gov.kui.jmssender.service.impl;
 import gov.kui.jmssender.dao.DocumentDtoRepository;
 import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.service.DocumentDtoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -10,6 +11,7 @@ import org.springframework.util.Assert;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class DocumentDtoServiceImpl implements DocumentDtoService {
     private final DocumentDtoRepository documentDtoRepository;
@@ -43,6 +45,11 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
     }
 
     private void checkDocumentDto(final DocumentDto documentDto) {
+        log.info("--- documentDto:"+documentDto);
+        log.info("--- documentDto.getSenders().isEmpty: "+documentDto.getSenders().isEmpty());
+        log.info("--- documentDto.getSenders(): "+documentDto.getSenders().size());
+        log.info("--- documentDto.getSenders(): "+documentDto.getSenders());
+
         Assert.notNull(documentDto, "документ не может быть null");
         Assert.notNull(documentDto.getDoctype(), "Не указан тип документа.");
         Assert.hasText(documentDto.getDoctype().getTitle(), "Не указан заголовок документа.");
@@ -50,6 +57,6 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
         Assert.notNull(documentDto.getDocDate(), "Не указана дата документа (null)");
         Assert.hasText(documentDto.getDocDate().toString(), "Не указана дата документа");
         Assert.notNull(documentDto.getSenders(), "Не указана сторона подписания (null).");
-        Assert.isTrue(documentDto.getSenders().isEmpty(), "Не указана сторона подписания (title).");
+        Assert.notEmpty(documentDto.getSenders(), "Не указана сторона подписания (title).");
     }
 }

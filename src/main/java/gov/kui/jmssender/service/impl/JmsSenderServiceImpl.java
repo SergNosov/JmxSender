@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 @Slf4j
+@Service
 public class JmsSenderServiceImpl implements JmsSenderService {
 
     private final DocumentDtoService documentDtoService;
@@ -29,7 +29,7 @@ public class JmsSenderServiceImpl implements JmsSenderService {
 
         if (!documentDtoService.isExists(documentDto)){
             jmsProducerService.send(documentDto);
-            return documentDtoService.save(documentDto);
+            return documentDtoService.save(documentDto);//todo если exception?
         }
 
         return Optional.empty();

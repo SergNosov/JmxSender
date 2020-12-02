@@ -31,10 +31,11 @@ public class JmsController {
         jmsSenderService.isJmsAlive();
 
         DocumentDto documentDto = new DocumentDto();
-        SenderDto senderDto = new SenderDto();
-        senderDto.setTitle("first");
 
-        documentDto.getSenders().add(senderDto);
+        SenderDto senderDto1 = new SenderDto();
+        senderDto1.setTitle("п1");
+
+        documentDto.getSenders().add(senderDto1);
 
         model.addAttribute("documentDto", documentDto);
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());

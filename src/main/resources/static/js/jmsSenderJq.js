@@ -1,12 +1,17 @@
 $(function () {
     $('#btnAddSender').click(function () {
-        let sendersDiv = $('#senders');
-        let senderDiv = $('#sender0');
+        const sendersDiv = $('#senders');
+        const senderDiv = $('#sender0');
 
-        const senderId = 'sender'+$('#senders .oneSender').length;
-        let addingDiv = senderDiv.clone().attr('id', senderId);
+        const sendersCount = $('#senders .oneSender').length;
+        const senderId = 'sender'+sendersCount;
 
-        let buttonDelDiv = $('<div class="col-md-2">' +
+        const addingDiv = senderDiv.clone().attr('id', senderId);
+        const input = addingDiv.find('input')
+            .attr('id','senders'+sendersCount+'.title')
+            .attr('name','senders['+sendersCount+'].title');
+
+        const buttonDelDiv = $('<div class="col-md-2">' +
             '<button type="button" class="btn-sm btn-secondary btnDeleteSender" onclick="btnDeleteSenderClick(this)">' +
             'Удалить' +
             '</button>' +
@@ -20,4 +25,15 @@ $(function () {
 
 function btnDeleteSenderClick(element) {
     $(element).parent().parent().remove();
+    // todo пересчет атрибутов id и name у всех input из div c id='senders'
+}
+
+function removeDiv() {
+    //todo перенести в нужное место и перейти на jquery
+    const statusBlock = document.getElementById('status');
+
+    if (statusBlock != null) {
+        statusBlock.parentElement.removeChild(statusBlock);
+    }
+    console.log("--- removeDiv()");
 }

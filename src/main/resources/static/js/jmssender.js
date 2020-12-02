@@ -1,4 +1,4 @@
-function removeDiv() {
+function removeDiv1() {
     const statusBlock = document.getElementById('status');
 
     if (statusBlock != null) {

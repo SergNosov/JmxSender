@@ -32,10 +32,9 @@ public class JmsController {
 
         DocumentDto documentDto = new DocumentDto();
 
-        SenderDto senderDto1 = new SenderDto();
-        senderDto1.setTitle("п1");
-
-        documentDto.getSenders().add(senderDto1);
+//        SenderDto senderDto1 = new SenderDto();
+//        senderDto1.setTitle("п1");
+//        documentDto.getSenders().add(senderDto1);
 
         model.addAttribute("documentDto", documentDto);
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());
@@ -53,6 +52,8 @@ public class JmsController {
             if (alreadySent) {
                 model.addAttribute("status", "Внимание! Документ с такими реквизитами отправлен ранее.");
             }
+        } else {
+            log.info("--- binding errors: "+ bindingResult.getAllErrors());
         }
 
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());

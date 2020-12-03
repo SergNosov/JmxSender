@@ -24,7 +24,8 @@
             >
                 <div class="mt-10">
                     <label for="doctype">Тип документа</label>
-                    <input type="text" class="form-control" id="doctype" required
+                    <input type="text" class="form-control" id="doctype"
+
                            th:field="*{doctype.title}"
                            th:oninput="removeDiv()"
                     />
@@ -67,7 +68,7 @@
                               th:field="*{content}">
                             </textarea>
                 </div>
-                <div class="mt-10">
+                <div class="mt-10" id="signature">
                     <div class="row">
                         <div class="col-md-9">
                             <label>Подпись</label>
@@ -83,17 +84,27 @@
                     <div class="mt-10" id="senders" th:each="item, stat: *{senders}">
                         <div class="row oneSender mt-10" id="sender0">
                             <div class="col-md-10">
-<!--                                <p th:text="*{senders[__${stat.index}__].title}"></p>-->
-                                <input type="text" class="form-control" required
+                                <input type="text" class="form-control"
                                        th:field="*{senders[__${stat.index}__].title}"/>
-<!--                                <label class="err-validation"-->
-<!--                                       th:if="${#fields.hasErrors('senders')}" th:errors="*{senders}">sender Error</label>-->
-<!--                                <label class="err-validation"-->
-<!--                                       th:if="${#fields.hasErrors('sender.title')}" th:errors="*{sender.title}">sender.title-->
-<!--                                    Error</label>-->
+                                <label class="err-validation"
+                                       th:if="${#fields.hasErrors('senders['+stat.index+'].title')}"
+                                       th:errors="*{senders[__${stat.index}__].title}">
+                                    sender.title Error
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button"
+                                        class="btn-sm btn-secondary btnDeleteSender"
+                                        onclick="btnDeleteSenderClick(this)"
+                                >
+                                    Удалить
+                                </button>
                             </div>
                         </div>
                     </div>
+                    <label class="err-validation"
+                           th:if="${#fields.hasErrors('senders')}" th:errors="*{senders}">senders Error
+                    </label>
                 </div>
                 <div class=" custom-file mt-10
                                 ">

@@ -11,6 +11,6 @@ public class SenderDto implements Serializable {
 
     int id;
 
-   // @NotBlank(message = "Не указано наименование стороны подписания.")
+    @NotBlank(message = "Не указано наименование стороны подписания.")
     String title;
 }

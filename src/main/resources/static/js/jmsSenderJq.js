@@ -2,7 +2,6 @@ $(function () {
     $('#btnAddSender').click(function () {
         const baseDiv = $('#signature');
         let sendersDiv = $('#senders');
-        console.log("--- sendersDiv.length = " + sendersDiv.length);
 
         const sendersCount = $('#senders .oneSender').length;
 
@@ -14,60 +13,40 @@ $(function () {
                 "id": "senders"
             }).appendTo(baseDiv);
         }
-        console.log("--- sendersCount: " + sendersCount);
 
         const senderDiv = $("<div class='row oneSender mt-10'></div>")
             .attr("id","sender" + sendersCount)
             .appendTo(sendersDiv);
 
-        const inputDiv = $("<div>")
-            .class("col-md-10")
+        const inputDiv = $("<div class='col-md-10'></div>")
             .appendTo(senderDiv);
 
-        const input = $("<input>")
-            .type("text")
-            .class("form-control")
-            .id("senders" + sendersCount + ".title")
+        const input = $("<input class='form-control' type='text'></input>")
+            .attr("id","senders" + sendersCount + ".title")
             .attr("name", "senders[" + sendersCount + "].title")
             .appendTo(inputDiv);
 
-        const buttonDiv = $("<div>")
-            .class("col-md-2")
+        const buttonDiv = $("<div class='col-md-2'></div>")
             .appendTo(senderDiv);
 
-        const button = $("<button>")
-            .type("button")
-            .class("btn-sm btn-secondary btnDeleteSender")
-            .click("btnDeleteSenderClick(this)")
-            .text("Удалить")
+        const button = $("<button class='btn-sm btn-secondary btnDeleteSender'" +
+            " type='button' " +
+            "onclick='btnDeleteSenderClick(this)'>Удалить</button>")
             .appendTo(buttonDiv);
-
-
-        // const senderDiv = $('#sender0');
-        //
-        // const sendersCount = $('#senders .oneSender').length;
-        // const senderId = 'sender'+sendersCount;
-        //
-        // const addingDiv = senderDiv.clone().attr('id', senderId);
-        // const input = addingDiv.find('input')
-        //     .attr('id','senders'+sendersCount+'.title')
-        //     .attr('name','senders['+sendersCount+'].title');
-        //
-        // const buttonDelDiv = $('<div class="col-md-2">' +
-        //     '<button type="button" class="btn-sm btn-secondary btnDeleteSender" onclick="btnDeleteSenderClick(this)">' +
-        //     'Удалить' +
-        //     '</button>' +
-        //     '</div>'
-        // );
-        //
-        // buttonDelDiv.appendTo(addingDiv);
-        // addingDiv.appendTo(sendersDiv);
     });
 });
 
 function btnDeleteSenderClick(element) {
     $(element).parent().parent().remove();
-    // todo пересчет атрибутов id и name у всех input из div c id='senders'
+
+    const oneSendersDiv = $('#senders .oneSender');
+
+    oneSendersDiv.each(function (index){
+        $(this).attr("id","sender"+index)
+            .find("input")
+            .attr("id","senders" + index + ".title")
+            .attr("name", "senders[" + index + "].title");
+    });
 }
 
 function removeDiv() {

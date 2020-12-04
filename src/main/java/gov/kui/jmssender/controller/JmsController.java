@@ -1,7 +1,6 @@
 package gov.kui.jmssender.controller;
 
 import gov.kui.jmssender.model.DocumentDto;
-import gov.kui.jmssender.model.SenderDto;
 import gov.kui.jmssender.service.JmsSenderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.print.Doc;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -30,13 +26,7 @@ public class JmsController {
     public String startPage(Model model) {
         jmsSenderService.isJmsAlive();
 
-        DocumentDto documentDto = new DocumentDto();
-
-//        SenderDto senderDto1 = new SenderDto();
-//        senderDto1.setTitle("п1");
-//        documentDto.getSenders().add(senderDto1);
-
-        model.addAttribute("documentDto", documentDto);
+        model.addAttribute("documentDto", new DocumentDto());
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());
 
         return "sender";

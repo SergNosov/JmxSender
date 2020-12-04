@@ -24,10 +24,9 @@
             >
                 <div class="mt-10">
                     <label for="doctype">Тип документа</label>
-                    <input type="text" class="form-control" id="doctype"
-
+                    <input type="text" class="form-control statusField" id="doctype"
+                           required
                            th:field="*{doctype.title}"
-                           th:oninput="removeDiv()"
                     />
                     <label class="err-validation"
                            th:if="${#fields.hasErrors('doctype')}" th:errors="*{doctype}">doctype Error</label>
@@ -38,18 +37,16 @@
                 <div class="row mt-10">
                     <div class="col-md-8">
                         <label for="numDoc">Номер документа</label>
-                        <input type="text" class="form-control" id="numDoc" required
+                        <input type="text" class="form-control statusField" id="numDoc" required
                                th:field="*{number}"
-                               th:oninput="removeDiv()"
                         />
                         <label class="err-validation"
                                th:if="${#fields.hasErrors('number')}" th:errors="*{number}">number Error</label>
                     </div>
                     <div class="col-md-4">
                         <label for="dateDoc">Дата документа</label>
-                        <input type="date" class="form-control" id="dateDoc" placeholder="Дата" required
+                        <input type="date" class="form-control statusField" id="dateDoc" placeholder="Дата" required
                                th:field="*{docDate}"
-                               th:oninput="removeDiv()"
                         />
                         <label class="err-validation"
                                th:if="${#fields.hasErrors('docDate')}" th:errors="*{docDate}">docDate Error</label>

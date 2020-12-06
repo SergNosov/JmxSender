@@ -37,6 +37,8 @@ public class JmsController {
 
         if (!bindingResult.hasErrors()) {
 
+            log.info("--- documentDto.file.size: "+ documentDto.getFile().getSize());
+
             boolean alreadySent = jmsSenderService.sendMessage(documentDto).isEmpty();
 
             if (alreadySent) {

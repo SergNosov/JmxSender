@@ -1,7 +1,9 @@
 package gov.kui.jmssender.model;
 
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -37,4 +39,7 @@ public class DocumentDto implements Serializable {
     @Valid
     @NotEmpty(message = "Не указана сторона подписания.")
     private List<SenderDto> senders =  new ArrayList<>();
+
+    @ToString.Exclude
+    private MultipartFile file;
 }

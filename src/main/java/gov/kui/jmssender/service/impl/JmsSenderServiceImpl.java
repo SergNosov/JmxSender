@@ -29,7 +29,8 @@ public class JmsSenderServiceImpl implements JmsSenderService {
 
         if (!documentDtoService.isExists(documentDto)){
             jmsProducerService.send(documentDto);
-            return documentDtoService.save(documentDto);//todo если exception?
+            //return documentDtoService.save(documentDto);//todo если exception?
+            return Optional.of(documentDto);
         }
 
         return Optional.empty();

@@ -21,6 +21,7 @@
                   th:object="${documentDto}"
                   th:action="@{/sender}"
                   th:method="post"
+                  enctype="multipart/form-data"
             >
                 <div class="mt-10">
                     <label for="doctype">Тип документа</label>
@@ -105,7 +106,11 @@
                 </div>
                 <div class=" custom-file mt-10
                                 ">
-                    <input type="file" class="custom-file-input" id="customFile"/>
+                    <input type="file"
+                           class="custom-file-input"
+                           id="customFile"
+                           th:field="*{file}"
+                    />
                     <label class="custom-file-label" for="customFile">Загрузить файл</label>
                 </div>
 

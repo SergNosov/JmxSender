@@ -1,5 +1,6 @@
 package gov.kui.jmssender.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,5 +42,5 @@ public class DocumentDto implements Serializable {
     private List<SenderDto> senders =  new ArrayList<>();
 
     @ToString.Exclude
-    private MultipartFile file;
+    private transient byte[] byteOfUploadFile;
 }

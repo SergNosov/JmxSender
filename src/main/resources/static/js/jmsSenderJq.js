@@ -31,8 +31,8 @@ function btnAddSenderClick() {
         .appendTo($senderDiv);
 
     const $input = $("<input class='form-control' type='text'></input>")
-        .attr("id", "senders" + sendersCount + ".title")
-        .attr("name", "senders[" + sendersCount + "].title")
+        .attr("id", "documentDto.senders" + sendersCount + ".title")
+        .attr("name", "documentDto.senders[" + sendersCount + "].title")
         .appendTo($inputDiv);
 
     const $buttonDiv = $("<div class='col-md-2'></div>")
@@ -52,7 +52,7 @@ function btnDeleteSenderClick(element) {
     $oneSendersDiv.each(function (index) {
         $(this).attr("id", "sender" + index)
             .find("input")
-            .attr("id", "senders" + index + ".title")
-            .attr("name", "senders[" + index + "].title");
+            .attr("id", "documentDto.senders" + index + ".title")
+            .attr("name", "documentDto.senders[" + index + "].title");
     });
 }

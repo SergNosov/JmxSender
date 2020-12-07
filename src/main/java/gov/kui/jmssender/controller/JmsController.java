@@ -1,6 +1,7 @@
 package gov.kui.jmssender.controller;
 
 import gov.kui.jmssender.model.DocumentDto;
+import gov.kui.jmssender.model.FormData;
 import gov.kui.jmssender.service.JmsSenderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -26,22 +29,19 @@ public class JmsController {
     public String startPage(Model model) {
         jmsSenderService.isJmsAlive();
 
-        model.addAttribute("documentDto", new DocumentDto());
+        model.addAttribute("formData", new FormData(new DocumentDto()));
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());
 
         return "sender";
     }
 
     @PostMapping("/sender")
-    public String submitDocument(@Valid DocumentDto documentDto, BindingResult bindingResult, Model model) {
+    public String submitDocument(@Valid FormData formData, BindingResult bindingResult, Model model) {
 
         if (!bindingResult.hasErrors()) {
+            Optional<DocumentDto> resultOfSending = jmsSenderService.sendMessage(formData.getDocumentDto());
 
-            log.info("--- documentDto.file.size: "+ documentDto.getFile().getSize());
-
-            boolean alreadySent = jmsSenderService.sendMessage(documentDto).isEmpty();
-
-            if (alreadySent) {
+            if (resultOfSending.isEmpty()) {
                 model.addAttribute("status", "Внимание! Документ с такими реквизитами отправлен ранее.");
             }
         } else {

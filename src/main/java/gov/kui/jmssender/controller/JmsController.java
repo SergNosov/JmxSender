@@ -1,6 +1,7 @@
 package gov.kui.jmssender.controller;
 
 import gov.kui.jmssender.model.DocumentDto;
+import gov.kui.jmssender.model.FileEntity;
 import gov.kui.jmssender.model.FormData;
 import gov.kui.jmssender.service.JmsSenderService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Optional;
 
 @Controller
@@ -36,19 +37,34 @@ public class JmsController {
     }
 
     @PostMapping("/sender")
-    public String submitDocument(@Valid FormData formData, BindingResult bindingResult, Model model) {
+    public String submitDocument(@Valid FormData formData,
+                                 BindingResult bindingResult,
+                                 Model model) {
 
         if (!bindingResult.hasErrors()) {
-            Optional<DocumentDto> resultOfSending = jmsSenderService.sendMessage(formData.getDocumentDto());
+
+            Optional<DocumentDto> resultOfSending = jmsSenderService.sendMessage(
+                    this.getDocumentDtoFromFormData(formData)
+            );
 
             if (resultOfSending.isEmpty()) {
                 model.addAttribute("status", "Внимание! Документ с такими реквизитами отправлен ранее.");
             }
         } else {
-            log.info("--- binding errors: "+ bindingResult.getAllErrors());
+            log.info("--- binding errors: " + bindingResult.getAllErrors());
         }
 
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());
         return "sender";
+    }
+
+    private DocumentDto getDocumentDtoFromFormData(FormData formData) {
+        DocumentDto documentDto = formData.getDocumentDto();
+        MultipartFile multipartFile = formData.getUploadFile();
+
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            documentDto.setFileEntity(FileEntity.of(multipartFile));
+        }
+        return documentDto;
     }
 }

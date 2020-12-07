@@ -2,7 +2,6 @@ package gov.kui.jmssender.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,10 +1,7 @@
 package gov.kui.jmssender.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -41,6 +38,5 @@ public class DocumentDto implements Serializable {
     @NotEmpty(message = "Не указана сторона подписания.")
     private List<SenderDto> senders =  new ArrayList<>();
 
-    @ToString.Exclude
-    private transient byte[] byteOfUploadFile;
+    private transient FileEntity fileEntity;
 }

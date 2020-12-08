@@ -9,12 +9,8 @@ $(function () {
         });
     }
 
-    $('#uploadFile').on('change', function (){
-        const size = (this.files[0].size / 1024 / 1024).toFixed(2);
-        if (size > 5) {
-            alert("Размер файла не должен привышать 5 MB");
-//            $('#uploadFile').val('');
-        }
+    $('#uploadFile').on('change', function () {
+        checkFileSize(this);
     });
 });
 
@@ -48,7 +44,7 @@ function btnAddSenderClick() {
 
     const $button = $("<button class='btn-sm btn-danger btnDeleteSender'" +
         " type='button' " +
-        "title='Удалить подпись' "+
+        "title='Удалить подпись' " +
         "onclick='btnDeleteSenderClick(this)'>" +
         "<i class='fa fa-trash' aria-hidden='true'></i>" +
         "</button>")
@@ -66,4 +62,14 @@ function btnDeleteSenderClick(element) {
             .attr("id", "documentDto.senders" + index + ".title")
             .attr("name", "documentDto.senders[" + index + "].title");
     });
+}
+
+function checkFileSize(element){
+    console.log("--- on checkFileSize")
+    const size = (element.files[0].size / 1024 / 1024).toFixed(2);
+    if (size > 5) {
+        alert("Размер файла не должен привышать 5 MB");
+        $(element).val('');
+        $("label[for='" + element.id + "']").text("Загрузить файл");
+    }
 }

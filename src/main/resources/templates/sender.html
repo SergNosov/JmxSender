@@ -30,9 +30,11 @@
                            th:field="*{documentDto.doctype.title}"
                     />
                     <label class="err-validation"
-                           th:if="${#fields.hasErrors('documentDto.doctype')}" th:errors="*{documentDto.doctype}">doctype Error</label>
+                           th:if="${#fields.hasErrors('documentDto.doctype')}" th:errors="*{documentDto.doctype}">doctype
+                        Error</label>
                     <label class="err-validation"
-                           th:if="${#fields.hasErrors('documentDto.doctype.title')}" th:errors="*{documentDto.doctype.title}">doctype.title
+                           th:if="${#fields.hasErrors('documentDto.doctype.title')}"
+                           th:errors="*{documentDto.doctype.title}">doctype.title
                         Error</label>
                 </div>
                 <div class="row mt-10">
@@ -42,7 +44,8 @@
                                th:field="*{documentDto.number}"
                         />
                         <label class="err-validation"
-                               th:if="${#fields.hasErrors('documentDto.number')}" th:errors="*{documentDto.number}">number Error</label>
+                               th:if="${#fields.hasErrors('documentDto.number')}" th:errors="*{documentDto.number}">number
+                            Error</label>
                     </div>
                     <div class="col-md-4">
                         <label for="dateDoc">Дата документа</label>
@@ -50,7 +53,8 @@
                                th:field="*{documentDto.docDate}"
                         />
                         <label class="err-validation"
-                               th:if="${#fields.hasErrors('documentDto.docDate')}" th:errors="*{documentDto.docDate}">docDate Error</label>
+                               th:if="${#fields.hasErrors('documentDto.docDate')}" th:errors="*{documentDto.docDate}">docDate
+                            Error</label>
                     </div>
                 </div>
                 <div class="mt-10">
@@ -58,7 +62,8 @@
                     <input type="text" class="form-control" id="title" required
                            th:field="*{documentDto.title}"/>
                     <label class="err-validation"
-                           th:if="${#fields.hasErrors('documentDto.title')}" th:errors="*{documentDto.title}">title Error</label>
+                           th:if="${#fields.hasErrors('documentDto.title')}" th:errors="*{documentDto.title}">title
+                        Error</label>
                 </div>
                 <div class="mt-10">
                     <label for="content">Краткое содержание</label>
@@ -68,14 +73,15 @@
                 </div>
                 <div class="mt-10" id="signature">
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-10">
                             <label>Подпись</label>
                         </div>
                         <div class="col-md-2">
                             <button type="button"
-                                    class="btn-sm btn-secondary"
+                                    class="btn btn-sm btn-primary"
+                                    title="Добавить подпись"
                                     id="btnAddSender">
-                                Добавить
+                                <i class="fa fa-plus" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
@@ -92,26 +98,28 @@
                             </div>
                             <div class="col-md-2">
                                 <button type="button"
-                                        class="btn-sm btn-secondary btnDeleteSender"
+                                        class="btn-sm btn-danger btnDeleteSender"
                                         onclick="btnDeleteSenderClick(this)"
+                                        title="Удалить подпись"
                                 >
-                                    Удалить
+                                    <i class='fa fa-trash' aria-hidden='true'></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                     <label class="err-validation"
-                           th:if="${#fields.hasErrors('documentDto.senders')}" th:errors="*{documentDto.senders}">senders Error
+                           th:if="${#fields.hasErrors('documentDto.senders')}" th:errors="*{documentDto.senders}">senders
+                        Error
                     </label>
                 </div>
                 <div class=" custom-file mt-10
                                 ">
                     <input type="file"
                            class="custom-file-input"
-                           id="customFile"
+                           id="uploadFile"
                            th:field="*{uploadFile}"
                     />
-                    <label class="custom-file-label" for="customFile">Загрузить файл</label>
+                    <label class="custom-file-label" for="uploadFile">Загрузить файл</label>
                 </div>
 
                 <button type="submit" class="btn btn-secondary btn-block mt-20" id="submitBtn">Отправить

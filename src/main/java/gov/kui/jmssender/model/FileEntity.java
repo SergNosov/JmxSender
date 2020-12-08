@@ -31,7 +31,7 @@ public class FileEntity implements Serializable {
 
         try {
             FileEntity fileEntity = new FileEntity();
-            fileEntity.setFilename(multipartFile.getName());
+            fileEntity.setFilename(multipartFile.getOriginalFilename());
             fileEntity.setContentType(multipartFile.getContentType());
             fileEntity.setFileSize(multipartFile.getSize());
             fileEntity.setByteOfUploadFile(multipartFile.getBytes());

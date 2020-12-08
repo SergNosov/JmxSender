@@ -8,6 +8,14 @@ $(function () {
             $('#status').remove();
         });
     }
+
+    $('#uploadFile').on('change', function (){
+        const size = (this.files[0].size / 1024 / 1024).toFixed(2);
+        if (size > 5) {
+            alert("Размер файла не должен привышать 5 MB");
+//            $('#uploadFile').val('');
+        }
+    });
 });
 
 function btnAddSenderClick() {
@@ -38,9 +46,12 @@ function btnAddSenderClick() {
     const $buttonDiv = $("<div class='col-md-2'></div>")
         .appendTo($senderDiv);
 
-    const $button = $("<button class='btn-sm btn-secondary btnDeleteSender'" +
+    const $button = $("<button class='btn-sm btn-danger btnDeleteSender'" +
         " type='button' " +
-        "onclick='btnDeleteSenderClick(this)'>Удалить</button>")
+        "title='Удалить подпись' "+
+        "onclick='btnDeleteSenderClick(this)'>" +
+        "<i class='fa fa-trash' aria-hidden='true'></i>" +
+        "</button>")
         .appendTo($buttonDiv);
 }
 

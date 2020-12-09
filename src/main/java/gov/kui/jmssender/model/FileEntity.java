@@ -17,6 +17,7 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FileEntity implements Serializable {
+    private static final long serialVersionUID = 389843191183184348L;
     private int id;
     private String filename;
     private String contentType;

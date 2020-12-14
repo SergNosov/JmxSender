@@ -1,5 +1,7 @@
 package gov.kui.jmssender.config;
 
+import com.atomikos.icatch.jta.UserTransactionManager;
+
 import com.hazelcast.collection.IList;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.ListConfig;
@@ -8,6 +10,7 @@ import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
+import com.hazelcast.transaction.HazelcastXAResource;
 import gov.kui.jmssender.model.DocumentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,14 +44,23 @@ public class HazelcastConfiguration {
     }
 
     @Bean
+    public HazelcastXAResource hazelcastXAResource(@Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance){
+        return hazelcastInstance.getXAResource();
+    }
+
+    @Bean
+    public UserTransactionManager userTransactionManager (){
+        return new UserTransactionManager();
+    }
+
+    @Bean
     public IList<DocumentDto> hazelcastDocumentDtoList(@Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance){
         return hazelcastInstance.getList(hzIListName);
     }
 
     @Bean
     public IMap<String, DocumentDto> hazelcastDocumentDtoMap(@Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance){
-        IMap<String, DocumentDto> documentDtoIMap = hazelcastInstance.getMap(hzIMapName);
-        return documentDtoIMap;
+        return hazelcastInstance.getMap(hzIMapName);
     }
 
     @Autowired

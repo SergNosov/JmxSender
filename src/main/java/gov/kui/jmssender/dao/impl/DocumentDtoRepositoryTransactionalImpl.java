@@ -6,7 +6,8 @@ import com.hazelcast.transaction.TransactionContext;
 import com.hazelcast.transaction.TransactionalMap;
 import gov.kui.jmssender.dao.DocumentDtoRepository;
 import gov.kui.jmssender.model.DocumentDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
@@ -14,13 +15,21 @@ import javax.transaction.Transaction;
 import javax.transaction.Transactional;
 import java.util.List;
 
-public class DocumentRepositoryTransactionalImpl implements DocumentDtoRepository {
+@Component
+public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoRepository {
 
-    @Autowired
-    private HazelcastXAResource hazelcastXAResource;
+    private final HazelcastXAResource hazelcastXAResource;
+    private final UserTransactionManager userTransactionManager;
+    private final String hzInstanceName;
 
-    @Autowired
-    private UserTransactionManager userTransactionManager;
+    public DocumentDtoRepositoryTransactionalImpl(HazelcastXAResource hazelcastXAResource,
+                                                  UserTransactionManager userTransactionManager,
+                                                  @Value("${jmssender.hazalcast.instanceName}")
+                                                       String hzInstanceName) {
+        this.hazelcastXAResource = hazelcastXAResource;
+        this.userTransactionManager = userTransactionManager;
+        this.hzInstanceName = hzInstanceName;
+    }
 
     @Override
     @Transactional
@@ -32,7 +41,7 @@ public class DocumentRepositoryTransactionalImpl implements DocumentDtoRepositor
 
             final TransactionContext hzTransactionContext = hazelcastXAResource.getTransactionContext();
 
-            final TransactionalMap<String, DocumentDto> hazelcastDocumentDtoMap = hzTransactionContext.getMap("documentDtoMap"); //todo !!!!!
+            final TransactionalMap<String, DocumentDto> hazelcastDocumentDtoMap = hzTransactionContext.getMap(hzInstanceName);
 
             final String key = this.generateKey(documentDto);
 

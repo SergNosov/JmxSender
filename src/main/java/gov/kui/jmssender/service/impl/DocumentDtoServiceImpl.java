@@ -5,6 +5,7 @@ import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.service.DocumentDtoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -17,7 +18,7 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
     private final DocumentDtoRepository documentDtoRepository;
 
     @Autowired
-    public DocumentDtoServiceImpl(DocumentDtoRepository documentDtoRepository ) {
+    public DocumentDtoServiceImpl(@Qualifier("documentDtoRepositoryTransactionalImpl") DocumentDtoRepository documentDtoRepository ) {
         this.documentDtoRepository = documentDtoRepository;
     }
 

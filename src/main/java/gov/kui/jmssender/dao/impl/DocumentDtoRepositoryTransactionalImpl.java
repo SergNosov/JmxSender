@@ -8,11 +8,15 @@ import gov.kui.jmssender.dao.DocumentDtoRepository;
 import gov.kui.jmssender.model.DocumentDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.Transaction;
-import javax.transaction.Transactional;
+import javax.transaction.xa.XAResource;
+//import javax.transaction.Transactional; //todo чем отличаются?
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Component
@@ -20,49 +24,87 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
 
     private final HazelcastXAResource hazelcastXAResource;
     private final UserTransactionManager userTransactionManager;
-    private final String hzInstanceName;
+    private final String hzIMapName;
 
     public DocumentDtoRepositoryTransactionalImpl(HazelcastXAResource hazelcastXAResource,
                                                   UserTransactionManager userTransactionManager,
-                                                  @Value("${jmssender.hazalcast.instanceName}")
-                                                       String hzInstanceName) {
+                                                  @Value("${jmssender.hazalcast.IMapName}")
+                                                       String hzIMapName) {
         this.hazelcastXAResource = hazelcastXAResource;
         this.userTransactionManager = userTransactionManager;
-        this.hzInstanceName = hzInstanceName;
+        this.hzIMapName = hzIMapName;
     }
 
     @Override
-    @Transactional
     public DocumentDto save(DocumentDto documentDto) {
+        Assert.notNull(documentDto, "Документ при записи в IMap не может быть null");
+
+        final String key = this.generateKey(documentDto);
+        Assert.notNull(key, "Ключ(key) не может быть null.");
+
+        try {
+            return this.saveToMap(key,documentDto);
+        } catch (SystemException | RollbackException e) {
+            throw new RuntimeException("Ошибка при записи documentDto в  Hazelcast TransactionalMap: "+e);
+        }
+    }
+
+    private DocumentDto saveToMap(String key, DocumentDto documentDto) throws SystemException, RollbackException {
+        final Transaction transaction = userTransactionManager.getTransaction();
+        transaction.enlistResource(hazelcastXAResource);
+
+        final TransactionContext hzTransactionContext = hazelcastXAResource.getTransactionContext();
+
+        final TransactionalMap<String, DocumentDto> hazelcastDocumentDtoMap = hzTransactionContext.getMap(hzIMapName);
+        hazelcastDocumentDtoMap.set(key,documentDto); // todo определиться со способом записи в IMap, что возвращаем?
+
+        transaction.delistResource(hazelcastXAResource, XAResource.TMSUCCESS);
+        return documentDto;
+    }
+
+    @Override
+    public List<DocumentDto> getAllDtos() {
+        try {
+            return this.getMapValues();
+        } catch (SystemException | RollbackException e) {
+            throw new RuntimeException("Ошибка получения списка documentDto в  DocumentDtoRepositoryTransactionalImpl: "+e);
+        }
+    }
+
+    private List<DocumentDto> getMapValues() throws SystemException, RollbackException {
+        final Transaction transaction = userTransactionManager.getTransaction();
+        transaction.enlistResource(hazelcastXAResource);
+
+        final TransactionContext hzTransactionContext = hazelcastXAResource.getTransactionContext();
+
+        final TransactionalMap<String, DocumentDto> hazelcastDocumentDtoMap = hzTransactionContext.getMap(hzIMapName);
+        List<DocumentDto> documentDtos = List.copyOf(hazelcastDocumentDtoMap.values());
+
+        transaction.delistResource(hazelcastXAResource, XAResource.TMSUCCESS);
+        return documentDtos;
+    }
+
+    @Override
+    public boolean isExists(DocumentDto documentDto) {
+        Assert.notNull(documentDto, "isExists: документ не может быть null");
+
+        final String key = this.generateKey(documentDto);
+        Assert.notNull(key, "existsByKey: ключ(key) не может быть null.");
 
         try {
             final Transaction transaction = userTransactionManager.getTransaction();
             transaction.enlistResource(hazelcastXAResource);
 
             final TransactionContext hzTransactionContext = hazelcastXAResource.getTransactionContext();
+            final TransactionalMap<String, DocumentDto> hazelcastDocumentDtoMap = hzTransactionContext.getMap(hzIMapName);
 
-            final TransactionalMap<String, DocumentDto> hazelcastDocumentDtoMap = hzTransactionContext.getMap(hzInstanceName);
+            final boolean isExists = hazelcastDocumentDtoMap.containsKey(key);
 
-            final String key = this.generateKey(documentDto);
-
-            hazelcastDocumentDtoMap.set(key,documentDto);
-
-            return documentDto;
-
+            transaction.delistResource(hazelcastXAResource, XAResource.TMSUCCESS);
+            return isExists;
         } catch (SystemException | RollbackException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new RuntimeException("Ошибка isExists в DocumentDtoRepositoryTransactionalImpl: "+e);
         }
-    }
-
-    @Override
-    public List<DocumentDto> getAllDtos() {
-        return null;
-    }
-
-    @Override
-    public boolean isExists(DocumentDto documentDto) {
-        return false;
     }
 
     private String generateKey(final DocumentDto documentDto) {

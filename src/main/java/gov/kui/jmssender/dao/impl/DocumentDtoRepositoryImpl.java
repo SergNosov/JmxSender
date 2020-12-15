@@ -37,7 +37,7 @@ public class DocumentDtoRepositoryImpl implements DocumentDtoRepository {
 
     @Override
     public boolean isExists(final DocumentDto documentDto) {
-        Assert.notNull(documentDto, "existsByKey: документ не может быть null");
+        Assert.notNull(documentDto, "isExists: документ не может быть null");
 
         final String key = this.generateKey(documentDto);
         Assert.notNull(key, "existsByKey: ключ(key) не может быть null.");

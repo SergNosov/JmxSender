@@ -28,7 +28,6 @@ public class JmsController {
 
     @GetMapping({"/", "/sender"})
     public String startPage(Model model) {
-        jmsSenderService.isJmsAlive();
 
         model.addAttribute("formData", new FormData(new DocumentDto()));
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());

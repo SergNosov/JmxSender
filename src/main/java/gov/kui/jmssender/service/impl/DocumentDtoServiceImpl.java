@@ -51,7 +51,7 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
         log.info("--- documentDto.getSenders(): "+documentDto.getSenders().size());
         log.info("--- documentDto.getSenders(): "+documentDto.getSenders());
 
-        Assert.notNull(documentDto, "документ не может быть null");
+        Assert.notNull(documentDto, "Документ не может быть null");
         Assert.notNull(documentDto.getDoctype(), "Не указан тип документа.");
         Assert.hasText(documentDto.getDoctype().getTitle(), "Не указан заголовок документа.");
         Assert.hasText(documentDto.getNumber(), "Не указан номер документа.");

@@ -14,8 +14,6 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.Transaction;
 import javax.transaction.xa.XAResource;
-//import javax.transaction.Transactional; //todo чем отличаются?
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

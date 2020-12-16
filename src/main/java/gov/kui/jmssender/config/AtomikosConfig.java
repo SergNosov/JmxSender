@@ -32,10 +32,7 @@ public class AtomikosConfig {
     @Bean
     public JtaTransactionManager jtaTransactionManager(UserTransactionManager atomikosTransactionManager,
                                                        UserTransactionImp atomikosUserTransaction){
-        JtaTransactionManager jtaTransactionManager = new JtaTransactionManager();
-        jtaTransactionManager.setTransactionManager(atomikosTransactionManager);
-        jtaTransactionManager.setUserTransaction(atomikosUserTransaction);
 
-        return jtaTransactionManager;
+        return new JtaTransactionManager(atomikosUserTransaction, atomikosTransactionManager);
     }
 }

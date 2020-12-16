@@ -41,3 +41,4 @@ build/
 *.lock
 *.index
 /tmlog.lck
+/transaction-logs/tmlog.lck

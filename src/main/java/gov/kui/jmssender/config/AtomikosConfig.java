@@ -9,6 +9,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 import javax.transaction.SystemException;
 
 // https://www.atomikos.com/Documentation/SpringIntegration#The_Advanced_Case_As_of_3_3
+// https://www.atomikos.com/Documentation/SpringBootIntegration
 
 @Configuration
 public class AtomikosConfig {

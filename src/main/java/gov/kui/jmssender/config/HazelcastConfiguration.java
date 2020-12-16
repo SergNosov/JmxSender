@@ -49,11 +49,6 @@ public class HazelcastConfiguration {
     }
 
     @Bean
-    public UserTransactionManager userTransactionManager (){
-        return new UserTransactionManager();
-    }
-
-    @Bean
     public IList<DocumentDto> hazelcastDocumentDtoList(@Qualifier("hazelcastInstance") HazelcastInstance hazelcastInstance){
         return hazelcastInstance.getList(hzIListName);
     }

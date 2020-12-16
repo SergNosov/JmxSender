@@ -40,3 +40,4 @@ build/
 *.meta
 *.lock
 *.index
+/tmlog.lck

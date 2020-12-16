@@ -90,19 +90,23 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
         Assert.notNull(key, "existsByKey: ключ(key) не может быть null.");
 
         try {
-            final Transaction transaction = userTransactionManager.getTransaction();
-            transaction.enlistResource(hazelcastXAResource);
-
-            final TransactionContext hzTransactionContext = hazelcastXAResource.getTransactionContext();
-            final TransactionalMap<String, DocumentDto> hazelcastDocumentDtoMap = hzTransactionContext.getMap(hzIMapName);
-
-            final boolean isExists = hazelcastDocumentDtoMap.containsKey(key);
-
-            transaction.delistResource(hazelcastXAResource, XAResource.TMSUCCESS);
-            return isExists;
+            return this.isDtoExists(key);
         } catch (SystemException | RollbackException e) {
             throw new RuntimeException("Ошибка isExists в DocumentDtoRepositoryTransactionalImpl: "+e);
         }
+    }
+
+    private boolean isDtoExists(String dtoKey) throws SystemException, RollbackException {
+        final Transaction transaction = userTransactionManager.getTransaction();
+        transaction.enlistResource(hazelcastXAResource);
+
+        final TransactionContext hzTransactionContext = hazelcastXAResource.getTransactionContext();
+        final TransactionalMap<String, DocumentDto> hazelcastDocumentDtoMap = hzTransactionContext.getMap(hzIMapName);
+
+        final boolean isExists = hazelcastDocumentDtoMap.containsKey(dtoKey);
+
+        transaction.delistResource(hazelcastXAResource, XAResource.TMSUCCESS);
+        return isExists;
     }
 
     private String generateKey(final DocumentDto documentDto) {

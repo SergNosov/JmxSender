@@ -27,7 +27,7 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
     public DocumentDtoRepositoryTransactionalImpl(HazelcastXAResource hazelcastXAResource,
                                                   UserTransactionManager userTransactionManager,
                                                   @Value("${jmssender.hazalcast.IMapName}")
-                                                       String hzIMapName) {
+                                                          String hzIMapName) {
         this.hazelcastXAResource = hazelcastXAResource;
         this.userTransactionManager = userTransactionManager;
         this.hzIMapName = hzIMapName;
@@ -41,9 +41,9 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
         Assert.notNull(key, "Ключ(key) не может быть null.");
 
         try {
-            return this.saveToMap(key,documentDto);
+            return this.saveToMap(key, documentDto);
         } catch (SystemException | RollbackException e) {
-            throw new RuntimeException("Ошибка при записи documentDto в  Hazelcast TransactionalMap: "+e);
+            throw new RuntimeException("Ошибка при записи documentDto в  Hazelcast TransactionalMap: " + e);
         }
     }
 
@@ -54,7 +54,7 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
         final TransactionContext hzTransactionContext = hazelcastXAResource.getTransactionContext();
 
         final TransactionalMap<String, DocumentDto> hazelcastDocumentDtoMap = hzTransactionContext.getMap(hzIMapName);
-        hazelcastDocumentDtoMap.set(key,documentDto); // todo определиться со способом записи в IMap, что возвращаем?
+        hazelcastDocumentDtoMap.set(key, documentDto); // todo определиться со способом записи в IMap, что возвращаем?
 
         transaction.delistResource(hazelcastXAResource, XAResource.TMSUCCESS);
         return documentDto;
@@ -65,7 +65,7 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
         try {
             return this.getMapValues();
         } catch (SystemException | RollbackException e) {
-            throw new RuntimeException("Ошибка получения списка documentDto в  DocumentDtoRepositoryTransactionalImpl: "+e);
+            throw new RuntimeException("Ошибка получения списка documentDto в  DocumentDtoRepositoryTransactionalImpl: " + e);
         }
     }
 
@@ -92,7 +92,7 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
         try {
             return this.isDtoExists(key);
         } catch (SystemException | RollbackException e) {
-            throw new RuntimeException("Ошибка isExists в DocumentDtoRepositoryTransactionalImpl: "+e);
+            throw new RuntimeException("Ошибка isExists в DocumentDtoRepositoryTransactionalImpl: " + e);
         }
     }
 

@@ -1,6 +1,5 @@
 package gov.kui.jmssender.model;
 
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

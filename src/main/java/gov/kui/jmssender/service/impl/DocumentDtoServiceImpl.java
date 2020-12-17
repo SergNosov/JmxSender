@@ -42,8 +42,6 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
     }
 
     private void checkDocumentDto(final DocumentDto documentDto) {
-        log.info("--- documentDto:"+documentDto);
-
         Assert.notNull(documentDto, "Документ не может быть null");
         Assert.notNull(documentDto.getDoctype(), "Не указан тип документа.");
         Assert.hasText(documentDto.getDoctype().getTitle(), "Не указан заголовок документа.");
@@ -52,5 +50,6 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
         Assert.hasText(documentDto.getDocDate().toString(), "Не указана дата документа");
         Assert.notNull(documentDto.getSenders(), "Не указана сторона подписания (null).");
         Assert.notEmpty(documentDto.getSenders(), "Не указана сторона подписания (title).");
+        log.info("--- documentDto is checked:"+documentDto);
     }
 }

@@ -15,12 +15,12 @@ public interface JmsSenderService {
      *@return Optional<DocumentDto>, если возвращаемое значение isEmpty() - то такой DTO-объекта отправлялся ранее
      * и присутствует во временном хранилище;
      */
-    public Optional<DocumentDto> sendMessage(DocumentDto documentDto);
+    Optional<DocumentDto> sendMessage(final DocumentDto documentDto);
 
     /**
      * используется для получение списка всех DTO-объектов из временного хранилища.
      *
      *@return список DTO-объектов;
      */
-    public List<DocumentDto> getAllDtos();
+    List<DocumentDto> getAllDtos();
 }

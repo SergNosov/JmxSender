@@ -36,7 +36,7 @@ public class JmsProducerServiceImpl implements JmsProducerService {
         this.password = password;
     }
 
-    public void send(DocumentDto documentDto){
+    public void send(final DocumentDto documentDto){
         jmsTemplate.convertAndSend(documentDto);
         log.info("--- sending: "+documentDto);
     }
@@ -49,7 +49,8 @@ public class JmsProducerServiceImpl implements JmsProducerService {
                     artemisHost+":8161/console/jolokia",
                     HttpMethod.GET,
                     new HttpEntity<String>(setHttpHeaders()),
-                    String.class);
+                    String.class
+            );
 
             log.info("---ActiveMQ Artemis status: " + responseEntity.getStatusCode());
             log.info("---ActiveMQ Artemis request body: " + responseEntity.getBody());

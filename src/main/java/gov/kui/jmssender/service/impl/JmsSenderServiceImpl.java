@@ -27,7 +27,7 @@ public class JmsSenderServiceImpl implements JmsSenderService {
 
     @Override
     @Transactional
-    public Optional<DocumentDto> sendMessage(DocumentDto documentDto) {
+    public Optional<DocumentDto> sendMessage(final DocumentDto documentDto) {
         if (!documentDtoService.isExists(documentDto)){
             jmsProducerService.send(documentDto);
             return Optional.of(documentDtoService.save(documentDto));

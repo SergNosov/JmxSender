@@ -34,7 +34,7 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
     }
 
     @Override
-    public DocumentDto save(DocumentDto documentDto) {
+    public DocumentDto save(final DocumentDto documentDto) {
         Assert.notNull(documentDto, "Документ при записи в IMap не может быть null");
 
         final String key = this.generateKey(documentDto);
@@ -83,7 +83,7 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
     }
 
     @Override
-    public boolean isExists(DocumentDto documentDto) {
+    public boolean isExists(final DocumentDto documentDto) {
         Assert.notNull(documentDto, "isExists: документ не может быть null");
 
         final String key = this.generateKey(documentDto);
@@ -96,7 +96,7 @@ public class DocumentDtoRepositoryTransactionalImpl implements DocumentDtoReposi
         }
     }
 
-    private boolean isDtoExists(String dtoKey) throws SystemException, RollbackException {
+    private boolean isDtoExists(final String dtoKey) throws SystemException, RollbackException {
         final Transaction transaction = userTransactionManager.getTransaction();
         transaction.enlistResource(hazelcastXAResource);
 

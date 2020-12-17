@@ -8,11 +8,11 @@ public interface JmsProducerService {
      *
      *@param documentDto DTO-объект для отправки.
      */
-    public void send(DocumentDto documentDto);
+    void send(final DocumentDto documentDto);
 
     /**
      * Используется для проверки доступности брокера сообщений.
      *
      */
-    public void isJmsAlive();
+    void isJmsAlive();
 }

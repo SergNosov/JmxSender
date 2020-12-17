@@ -1,13 +1,11 @@
 package gov.kui.jmssender.config;
 
-import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
 import org.apache.activemq.artemis.jms.client.ActiveMQXAConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
@@ -31,27 +29,6 @@ public class JmsConfig {
         this.password = password;
         this.destinationQueue=destinationQueue;
     }
-
-//    @Bean
-//    public ActiveMQConnectionFactory senderActiveMQConnectionFactory() {
-//        return new ActiveMQConnectionFactory(brokerUrl,user,password);
-//    }
-
-//    @Bean
-//    public CachingConnectionFactory cachingConnectionFactory(ActiveMQConnectionFactory senderActiveMQConnectionFactory) {
-//        return new CachingConnectionFactory(
-//                senderActiveMQConnectionFactory);
-//    }
-
-//    @Bean
-//    public JmsTemplate jmsTemplate(CachingConnectionFactory cachingConnectionFactory,
-//                                   MessageConverter messageConverter,
-//                                   Destination queue) {
-//        JmsTemplate jmsTemplate = new JmsTemplate(cachingConnectionFactory);
-//        jmsTemplate.setDefaultDestination(queue);
-//        jmsTemplate.setMessageConverter(messageConverter);
-//        return jmsTemplate;
-//    }
 
     @Bean
     public ActiveMQXAConnectionFactory senderActiveMQXAConnectionFactory(){

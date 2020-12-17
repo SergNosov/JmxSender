@@ -3,7 +3,6 @@ package gov.kui.jmssender.service;
 import gov.kui.jmssender.model.DocumentDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface DocumentDtoService {
     /**
@@ -12,7 +11,7 @@ public interface DocumentDtoService {
      *@param documentDto DTO-объект для сохранения.
      *@return DocumentDto.
      */
-    DocumentDto save(DocumentDto documentDto);
+    DocumentDto save(final DocumentDto documentDto);
 
     /**
      * используется для получения списка DTO-объектов сохраненных ранее.
@@ -27,5 +26,5 @@ public interface DocumentDtoService {
      *@return true - DTO объект присутствует в хранилище (сохранялся ранее),
      * false - DTO объекта в хранилище нет.
      */
-    boolean isExists(DocumentDto documentDto);
+    boolean isExists(final DocumentDto documentDto);
 }

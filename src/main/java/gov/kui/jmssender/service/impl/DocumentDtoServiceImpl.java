@@ -17,7 +17,8 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
     private final DocumentDtoRepository documentDtoRepository;
 
     @Autowired
-    public DocumentDtoServiceImpl(@Qualifier("documentDtoRepositoryTransactionalImpl") DocumentDtoRepository documentDtoRepository ) {
+    public DocumentDtoServiceImpl(@Qualifier("documentDtoRepositoryTransactionalImpl")
+                                              DocumentDtoRepository documentDtoRepository ) {
         this.documentDtoRepository = documentDtoRepository;
     }
 
@@ -29,7 +30,7 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
     }
 
     @Override
-    public boolean isExists(DocumentDto documentDto) {
+    public boolean isExists(final DocumentDto documentDto) {
 
         Assert.notNull(documentDto, "documentDto не может быть null");
         return documentDtoRepository.isExists(documentDto);
@@ -42,9 +43,6 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
 
     private void checkDocumentDto(final DocumentDto documentDto) {
         log.info("--- documentDto:"+documentDto);
-        log.info("--- documentDto.getSenders().isEmpty: "+documentDto.getSenders().isEmpty());
-        log.info("--- documentDto.getSenders(): "+documentDto.getSenders().size());
-        log.info("--- documentDto.getSenders(): "+documentDto.getSenders());
 
         Assert.notNull(documentDto, "Документ не может быть null");
         Assert.notNull(documentDto.getDoctype(), "Не указан тип документа.");

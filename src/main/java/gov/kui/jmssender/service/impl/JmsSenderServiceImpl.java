@@ -41,4 +41,9 @@ public class JmsSenderServiceImpl implements JmsSenderService {
     public List<DocumentDto> getAllDtos() {
         return documentDtoService.getAllDtos();
     }
+
+    @Override
+    public void isAvailable() {
+        jmsProducerService.isJmsAlive(); //todo придумать проверку временного хранилища
+    }
 }

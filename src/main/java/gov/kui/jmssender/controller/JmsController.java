@@ -21,18 +21,15 @@ import java.util.Optional;
 @Slf4j
 public class JmsController {
     private final JmsSenderService jmsSenderService;
-    private final JmsProducerService jmsProducerService;
 
     @Autowired
-    public JmsController(JmsSenderService jmsSenderService,
-                         JmsProducerService jmsProducerService) {
+    public JmsController(JmsSenderService jmsSenderService) {
         this.jmsSenderService = jmsSenderService;
-        this.jmsProducerService = jmsProducerService;
     }
 
     @GetMapping({"/", "/sender"})
     public String startPage(Model model) {
-        jmsProducerService.isJmsAlive();
+        jmsSenderService.isAvailable();
 
         model.addAttribute("formData", new FormData(new DocumentDto()));
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());
@@ -44,7 +41,7 @@ public class JmsController {
     public String submitDocument(@Valid FormData formData,
                                  BindingResult bindingResult,
                                  Model model) {
-        jmsProducerService.isJmsAlive();
+        jmsSenderService.isAvailable();
 
         if (!bindingResult.hasErrors()) {
 

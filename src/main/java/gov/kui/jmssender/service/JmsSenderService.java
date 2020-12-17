@@ -23,4 +23,10 @@ public interface JmsSenderService {
      *@return список DTO-объектов;
      */
     List<DocumentDto> getAllDtos();
+
+    /**
+     * Используется для проверки доступности брокера сообщений. // todo правильно сформулировать задачу о перверке доступности частей обработки данных
+     *
+     */
+    void isAvailable();
 }

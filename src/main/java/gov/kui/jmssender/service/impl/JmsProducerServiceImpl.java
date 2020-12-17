@@ -20,27 +20,24 @@ import org.springframework.web.client.RestTemplate;
 @PropertySource("classpath:application.properties")
 public class JmsProducerServiceImpl implements JmsProducerService {
     private final JmsTemplate jmsTemplate;
-    private final String destinationQueue;
     private final String artemisHost;
     private final String login;
     private final String password;
 
     @Autowired
     public JmsProducerServiceImpl(JmsTemplate jmsTemplate,
-                                  @Value("${jms.queue.destination}") String destinationQueue,
                                   @Value ("${artemis.host}") String artemisHost,
                                   @Value ("${artemis.user}") String login,
                                   @Value ("${artemis.password}") String password
     ) {
         this.jmsTemplate = jmsTemplate;
-        this.destinationQueue = destinationQueue;
         this.artemisHost = artemisHost;
         this.login = login;
         this.password = password;
     }
 
     public void send(DocumentDto documentDto){
-        jmsTemplate.convertAndSend(destinationQueue, documentDto);
+        jmsTemplate.convertAndSend(documentDto);
         log.info("--- sending: "+documentDto);
     }
 

@@ -28,10 +28,9 @@ public class JmsSenderServiceImpl implements JmsSenderService {
     @Override
     @Transactional
     public Optional<DocumentDto> sendMessage(DocumentDto documentDto) {
-        jmsProducerService.isJmsAlive();
         if (!documentDtoService.isExists(documentDto)){
-//            jmsProducerService.send(documentDto);
-            return Optional.of(documentDtoService.save(documentDto));//todo если exception?
+            jmsProducerService.send(documentDto);
+            return Optional.of(documentDtoService.save(documentDto));
         }
 
         return Optional.empty();
@@ -40,7 +39,6 @@ public class JmsSenderServiceImpl implements JmsSenderService {
     @Override
     @Transactional(readOnly = true)
     public List<DocumentDto> getAllDtos() {
-        jmsProducerService.isJmsAlive();
         return documentDtoService.getAllDtos();
     }
 }

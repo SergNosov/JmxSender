@@ -3,6 +3,7 @@ package gov.kui.jmssender.controller;
 import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.model.FileEntity;
 import gov.kui.jmssender.model.FormData;
+import gov.kui.jmssender.service.JmsProducerService;
 import gov.kui.jmssender.service.JmsSenderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,18 @@ import java.util.Optional;
 @Slf4j
 public class JmsController {
     private final JmsSenderService jmsSenderService;
+    private final JmsProducerService jmsProducerService;
 
     @Autowired
-    public JmsController(JmsSenderService jmsSenderService) {
+    public JmsController(JmsSenderService jmsSenderService,
+                         JmsProducerService jmsProducerService) {
         this.jmsSenderService = jmsSenderService;
+        this.jmsProducerService = jmsProducerService;
     }
 
     @GetMapping({"/", "/sender"})
     public String startPage(Model model) {
+        jmsProducerService.isJmsAlive();
 
         model.addAttribute("formData", new FormData(new DocumentDto()));
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());
@@ -39,6 +44,7 @@ public class JmsController {
     public String submitDocument(@Valid FormData formData,
                                  BindingResult bindingResult,
                                  Model model) {
+        jmsProducerService.isJmsAlive();
 
         if (!bindingResult.hasErrors()) {
 

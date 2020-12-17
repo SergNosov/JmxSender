@@ -29,14 +29,12 @@ public class JmsSenderServiceImpl implements JmsSenderService {
     @Transactional
     public Optional<DocumentDto> sendMessage(DocumentDto documentDto) {
         jmsProducerService.isJmsAlive();
-        return documentDtoService.save(documentDto);
-
-//        if (!documentDtoService.isExists(documentDto)){
+        if (!documentDtoService.isExists(documentDto)){
 //            jmsProducerService.send(documentDto);
-//            return documentDtoService.save(documentDto);//todo если exception?
-//        }
-//
-//        return Optional.empty();
+            return Optional.of(documentDtoService.save(documentDto));//todo если exception?
+        }
+
+        return Optional.empty();
     }
 
     @Override

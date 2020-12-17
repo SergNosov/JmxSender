@@ -10,16 +10,16 @@ public interface DocumentDtoService {
      * используется для сохранения DTO-объекта в хранилище переданных DTO.
      *
      *@param documentDto DTO-объект для сохранения.
-     *@return Optional<DocumentDto>, если возвращаемое значение isEmpty() - то такой DTO-объект сохранялся ранее.
+     *@return DocumentDto.
      */
-    public Optional<DocumentDto> save(DocumentDto documentDto);
+    DocumentDto save(DocumentDto documentDto);
 
     /**
      * используется для получения списка DTO-объектов сохраненных ранее.
      *
      *@return список DTO-объектов сохраненных ранее.
      */
-    public List<DocumentDto> getAllDtos();
+    List<DocumentDto> getAllDtos();
 
     /**
      * используется для проверки наличия DTO-объекта в хранилище переданных DTO.
@@ -27,5 +27,5 @@ public interface DocumentDtoService {
      *@return true - DTO объект присутствует в хранилище (сохранялся ранее),
      * false - DTO объекта в хранилище нет.
      */
-    public boolean isExists(DocumentDto documentDto);
+    boolean isExists(DocumentDto documentDto);
 }

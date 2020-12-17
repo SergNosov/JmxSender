@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -23,19 +22,15 @@ public class DocumentDtoServiceImpl implements DocumentDtoService {
     }
 
     @Override
-    public Optional<DocumentDto> save(final DocumentDto documentDto) {
-        this.checkDocumentDto(documentDto);
+    public DocumentDto save(final DocumentDto documentDto) {
 
-        if (!this.isExists(documentDto)) {
-            documentDtoRepository.save(documentDto);
-            return Optional.of(documentDto);
-        } else {
-            return Optional.empty();
-        }
+        this.checkDocumentDto(documentDto);
+        return documentDtoRepository.save(documentDto);
     }
 
     @Override
     public boolean isExists(DocumentDto documentDto) {
+
         Assert.notNull(documentDto, "documentDto не может быть null");
         return documentDtoRepository.isExists(documentDto);
     }

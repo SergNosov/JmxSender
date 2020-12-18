@@ -20,18 +20,18 @@ import org.springframework.web.client.RestTemplate;
 @PropertySource("classpath:application.properties")
 public class JmsProducerServiceImpl implements JmsProducerService {
     private final JmsTemplate jmsTemplate;
-    private final String artemisHost;
+    private final String artemisHostJolokia;
     private final String login;
     private final String password;
 
     @Autowired
     public JmsProducerServiceImpl(JmsTemplate jmsTemplate,
-                                  @Value ("${artemis.host}") String artemisHost,
+                                  @Value ("${artemis.host.jolokia}") String artemisHostJolokia,
                                   @Value ("${artemis.user}") String login,
                                   @Value ("${artemis.password}") String password
     ) {
         this.jmsTemplate = jmsTemplate;
-        this.artemisHost = artemisHost;
+        this.artemisHostJolokia = artemisHostJolokia;
         this.login = login;
         this.password = password;
     }
@@ -46,7 +46,7 @@ public class JmsProducerServiceImpl implements JmsProducerService {
             final RestTemplate restTemplate = new RestTemplate();
 
             ResponseEntity<String> responseEntity = restTemplate.exchange(
-                    artemisHost+":8161/console/jolokia",
+                    artemisHostJolokia,
                     HttpMethod.GET,
                     new HttpEntity<String>(setHttpHeaders()),
                     String.class
@@ -64,7 +64,7 @@ public class JmsProducerServiceImpl implements JmsProducerService {
         //С целью решения проблемы с заголовком Origin указать JVM аргумент:
         //-Dsun.net.http.allowRestrictedHeaders=true
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setOrigin(artemisHost);
+        httpHeaders.setOrigin(artemisHostJolokia);
         httpHeaders.setBasicAuth(login, password);
         return httpHeaders;
     }

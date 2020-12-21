@@ -52,8 +52,8 @@ public class JmsProducerServiceImpl implements JmsProducerService {
                     String.class
             );
 
-            log.info("---ActiveMQ Artemis status: " + responseEntity.getStatusCode());
-            log.info("---ActiveMQ Artemis request body: " + responseEntity.getBody());
+            log.info("--- ActiveMQ Artemis status: " + responseEntity.getStatusCode());
+            log.info("--- ActiveMQ Artemis request body: " + responseEntity.getBody());
         } catch (ResourceAccessException conEx){
             log.info("--- Нет связи с брокером сообщений ActiveMQ Artemis: " + conEx.getMessage());
             throw new RuntimeException("--- Нет связи с брокером сообщений ActiveMQ Artemis: "+conEx.getMessage());

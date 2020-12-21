@@ -1,7 +1,9 @@
 package gov.kui.jmssender.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.artemis.jms.client.ActiveMQQueue;
 import org.apache.activemq.artemis.jms.client.ActiveMQXAConnectionFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +15,7 @@ import org.springframework.jms.support.converter.MessageType;
 
 import javax.jms.Destination;
 
+@Slf4j
 @Configuration
 public class JmsConfig {
     private final String brokerUrl;
@@ -35,17 +38,29 @@ public class JmsConfig {
         return new ActiveMQXAConnectionFactory(brokerUrl,user,password);
     }
 
-    @Bean(initMethod = "init", destroyMethod = "close")
-    public AtomikosConnectionFactoryBean  atomikosConnectionFactoryBean(ActiveMQXAConnectionFactory senderActiveMQXAConnectionFactory){
-        AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
-        atomikosConnectionFactoryBean.setXaConnectionFactory(senderActiveMQXAConnectionFactory);
-        atomikosConnectionFactoryBean.setUniqueResourceName("SenderJMS_"+destinationQueue);
+//    @Bean(initMethod = "init", destroyMethod = "close")
+//    public AtomikosConnectionFactoryBean  atomikosConnectionFactoryBean(ActiveMQXAConnectionFactory senderActiveMQXAConnectionFactory){
+//        AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
+//        atomikosConnectionFactoryBean.setXaConnectionFactory(senderActiveMQXAConnectionFactory);
+//        atomikosConnectionFactoryBean.setUniqueResourceName("SenderJMS_ACFB_"+destinationQueue);
+//
+//        return atomikosConnectionFactoryBean;
+//    }
 
-        return atomikosConnectionFactoryBean;
-    }
+//    @Bean(initMethod = "init", destroyMethod = "close")
+//    public AtomikosConnectionFactoryBean  jmsSenderConnectionFactoryBean(ActiveMQXAConnectionFactory senderActiveMQXAConnectionFactory){
+//
+//        AtomikosConnectionFactoryBean jmsSenderConnectionFactoryBean = new JmsSenderConnectionFactoryBean();
+//        jmsSenderConnectionFactoryBean.setXaConnectionFactory(senderActiveMQXAConnectionFactory);
+//        jmsSenderConnectionFactoryBean.setUniqueResourceName("SenderJMS_SCFB_"+destinationQueue);
+//        log.info("--- jmsSenderConnectionFactoryBean ("+System.identityHashCode(jmsSenderConnectionFactoryBean)+");");
+//
+//        return jmsSenderConnectionFactoryBean;
+//    }
 
     @Bean
-    public JmsTemplate jmsTemplate(AtomikosConnectionFactoryBean  atomikosConnectionFactoryBean,
+    public JmsTemplate jmsTemplate( @Qualifier("jmsSenderConnectionFactoryBean")
+                                                AtomikosConnectionFactoryBean  atomikosConnectionFactoryBean,
                                    MessageConverter messageConverter,
                                    Destination queue) {
         JmsTemplate jmsTemplate = new JmsTemplate(atomikosConnectionFactoryBean);

@@ -2,18 +2,15 @@ package gov.kui.jmssender.service.impl;
 
 import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.service.JmsProducerService;
+import gov.kui.jmssender.util.JmsSenderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
@@ -26,9 +23,9 @@ public class JmsProducerServiceImpl implements JmsProducerService {
 
     @Autowired
     public JmsProducerServiceImpl(JmsTemplate jmsTemplate,
-                                  @Value ("${artemis.host.jolokia}") String artemisHostJolokia,
-                                  @Value ("${artemis.user}") String login,
-                                  @Value ("${artemis.password}") String password
+                                  @Value("${artemis.host.jolokia}") String artemisHostJolokia,
+                                  @Value("${artemis.user}") String login,
+                                  @Value("${artemis.password}") String password
     ) {
         this.jmsTemplate = jmsTemplate;
         this.artemisHostJolokia = artemisHostJolokia;
@@ -36,36 +33,27 @@ public class JmsProducerServiceImpl implements JmsProducerService {
         this.password = password;
     }
 
-    public void send(final DocumentDto documentDto){
+    public void send(final DocumentDto documentDto) {
         jmsTemplate.convertAndSend(documentDto);
-        log.info("--- sending: "+documentDto);
+        log.info("--- sending: " + documentDto);
     }
 
-    public void  isJmsAlive(){
-        try {
-            final RestTemplate restTemplate = new RestTemplate();
+    public void isJmsAlive() {
+        final ResponseEntity<String> response = JmsSenderUtils.IsJmsArtemisAvailable(
+                this.artemisHostJolokia,
+                this.login,
+                this.password
+        );
 
-            ResponseEntity<String> responseEntity = restTemplate.exchange(
-                    artemisHostJolokia,
-                    HttpMethod.GET,
-                    new HttpEntity<String>(setHttpHeaders()),
-                    String.class
-            );
-
-            log.info("--- ActiveMQ Artemis status: " + responseEntity.getStatusCode());
-            log.info("--- ActiveMQ Artemis request body: " + responseEntity.getBody());
-        } catch (ResourceAccessException conEx){
-            log.info("--- Нет связи с брокером сообщений ActiveMQ Artemis: " + conEx.getMessage());
-            throw new RuntimeException("--- Нет связи с брокером сообщений ActiveMQ Artemis: "+conEx.getMessage());
+        if (response.getStatusCode() == HttpStatus.SERVICE_UNAVAILABLE) {
+            log.error("--- JMS Брокер сообщений ActiveMQ Artemis недоступен. " + "\n" +
+                    "--- HttpStatus: " + response.getStatusCode() + "\n" +
+                    "--- ResponseBody: " + response.getBody() + "\n");
+            throw new RuntimeException("--- Нет связи с брокером сообщений ActiveMQ Artemis: " + response.getBody());
+        } else {
+            log.info("--- JMS Брокер ActiveMQ Artemis. Проверка соединения: " + "\n" +
+                    "--- HttpStatus: " + response.getStatusCode() + "\n" +
+                    "--- ResponseBody: " + response.getBody() + "\n");
         }
-    }
-
-    private HttpHeaders setHttpHeaders() {
-        //С целью решения проблемы с заголовком Origin указать JVM аргумент:
-        //-Dsun.net.http.allowRestrictedHeaders=true
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setOrigin(artemisHostJolokia);
-        httpHeaders.setBasicAuth(login, password);
-        return httpHeaders;
     }
 }

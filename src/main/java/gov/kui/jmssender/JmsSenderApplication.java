@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-public class JmssenderApplication {
+public class JmsSenderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(JmssenderApplication.class, args);
+        SpringApplication.run(JmsSenderApplication.class, args);
     }
 
 }

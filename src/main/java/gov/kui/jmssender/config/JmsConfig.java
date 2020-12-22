@@ -38,32 +38,11 @@ public class JmsConfig {
         return new ActiveMQXAConnectionFactory(brokerUrl,user,password);
     }
 
-//    @Bean(initMethod = "init", destroyMethod = "close")
-//    public AtomikosConnectionFactoryBean  atomikosConnectionFactoryBean(ActiveMQXAConnectionFactory senderActiveMQXAConnectionFactory){
-//        AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
-//        atomikosConnectionFactoryBean.setXaConnectionFactory(senderActiveMQXAConnectionFactory);
-//        atomikosConnectionFactoryBean.setUniqueResourceName("SenderJMS_ACFB_"+destinationQueue);
-//
-//        return atomikosConnectionFactoryBean;
-//    }
-
-//    @Bean(initMethod = "init", destroyMethod = "close")
-//    public AtomikosConnectionFactoryBean  jmsSenderConnectionFactoryBean(ActiveMQXAConnectionFactory senderActiveMQXAConnectionFactory){
-//
-//        AtomikosConnectionFactoryBean jmsSenderConnectionFactoryBean = new JmsSenderConnectionFactoryBean();
-//        jmsSenderConnectionFactoryBean.setXaConnectionFactory(senderActiveMQXAConnectionFactory);
-//        jmsSenderConnectionFactoryBean.setUniqueResourceName("SenderJMS_SCFB_"+destinationQueue);
-//        log.info("--- jmsSenderConnectionFactoryBean ("+System.identityHashCode(jmsSenderConnectionFactoryBean)+");");
-//
-//        return jmsSenderConnectionFactoryBean;
-//    }
-
     @Bean
-    public JmsTemplate jmsTemplate( @Qualifier("jmsSenderConnectionFactoryBean")
-                                                AtomikosConnectionFactoryBean  atomikosConnectionFactoryBean,
+    public JmsTemplate jmsTemplate(AtomikosConnectionFactoryBean  jmsSenderConnectionFactoryBean,
                                    MessageConverter messageConverter,
                                    Destination queue) {
-        JmsTemplate jmsTemplate = new JmsTemplate(atomikosConnectionFactoryBean);
+        JmsTemplate jmsTemplate = new JmsTemplate(jmsSenderConnectionFactoryBean);
         jmsTemplate.setDefaultDestination(queue);
         jmsTemplate.setMessageConverter(messageConverter);
         return jmsTemplate;

@@ -1,75 +1,68 @@
 package gov.kui.jmssender.config;
 
+import gov.kui.jmssender.util.JmsSenderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.artemis.jms.client.ActiveMQXAConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
-public class JmsSenderConnectionFactoryBean extends AtomikosConnectionFactoryBean{
+public class JmsSenderConnectionFactoryBean extends AtomikosConnectionFactoryBean {
 
     private final ActiveMQXAConnectionFactory senderActiveMQXAConnectionFactory;
     private final String destinationQueue;
+    private final String artemisHostJolokia;
+    private final String login;
+    private final String password;
 
     @Autowired
     public JmsSenderConnectionFactoryBean(ActiveMQXAConnectionFactory senderActiveMQXAConnectionFactory,
-                                          @Value("${jms.queue.destination}")
-                                          String destinationQueue) {
-        this.destinationQueue = destinationQueue;
+                                          @Value("${jms.queue.destination}") String destinationQueue,
+                                          @Value("${artemis.host.jolokia}") String artemisHostJolokia,
+                                          @Value("${artemis.user}") String login,
+                                          @Value("${artemis.password}") String password) {
         this.senderActiveMQXAConnectionFactory = senderActiveMQXAConnectionFactory;
-        this.setXaConnectionFactory(senderActiveMQXAConnectionFactory);
-        this.setUniqueResourceName("SenderJMS_SCFB_"+destinationQueue);
+        this.destinationQueue = destinationQueue;
+        this.artemisHostJolokia = artemisHostJolokia;
+        this.login = login;
+        this.password = password;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("--- jmsSenderConnectionFactoryBean  init("+System.identityHashCode(this)+");");
+        this.setXaConnectionFactory(this.senderActiveMQXAConnectionFactory);
+        this.setUniqueResourceName("SenderJMS_SCFB_" + destinationQueue);
+
         isJmsAlive();
+
         super.afterPropertiesSet();
     }
 
     @Override
     public void destroy() throws Exception {
-        log.info("--- jmsSenderConnectionFactoryBean  destroy("+System.identityHashCode(this)+");");
         super.destroy();
     }
 
-    private void  isJmsAlive(){
-        log.info("--- jmsSenderConnectionFactoryBean (с проверкой соединения JMS)");
-        try {
-            final RestTemplate restTemplate = new RestTemplate();
-
-            ResponseEntity<String> responseEntity = restTemplate.exchange(
-                    "http://localhost:8161/console/jolokia",
-                    HttpMethod.GET,
-                    new HttpEntity<String>(setHttpHeaders()),
-                    String.class
-            );
-
-            log.info("--- ActiveMQ Artemis status: " + responseEntity.getStatusCode());
-            log.info("--- ActiveMQ Artemis request body: " + responseEntity.getBody());
-        } catch (ResourceAccessException conEx){
-            log.error("--- Нет связи с брокером сообщений ActiveMQ Artemis: " + "\n"+conEx.getMessage());
-            //System.exit(-1000);
-            throw new RuntimeException("--- Нет связи с брокером сообщений. Exception: "+conEx);
+    private void isJmsAlive() {
+        final ResponseEntity<String> response = JmsSenderUtils.IsJmsArtemisAvailable(
+                this.artemisHostJolokia,
+                this.login,
+                this.password
+        );
+        if (response.getStatusCode() == HttpStatus.SERVICE_UNAVAILABLE) {
+            log.error("--- JMS Брокер сообщений ActiveMQ Artemis недоступен. " + "\n" +
+                    "--- HttpStatus: " + response.getStatusCode() + "\n" +
+                    "--- ResponseBody: " + response.getBody()+"\n");
+            System.exit(-1000);
+        } else {
+            log.info("--- JMS Брокер ActiveMQ Artemis. Проверка соединения: " + "\n" +
+                    "--- HttpStatus: " + response.getStatusCode() + "\n" +
+                    "--- ResponseBody: " + response.getBody()+"\n");
         }
-    }
-
-    private HttpHeaders setHttpHeaders() {
-        //С целью решения проблемы с заголовком Origin указать JVM аргумент:
-        //-Dsun.net.http.allowRestrictedHeaders=true
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setOrigin("http://localhost:8161/console/jolokia");
-        httpHeaders.setBasicAuth("root", "root");
-        return httpHeaders;
     }
 }

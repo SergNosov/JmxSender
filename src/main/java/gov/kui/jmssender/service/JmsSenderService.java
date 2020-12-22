@@ -18,6 +18,14 @@ public interface JmsSenderService {
     Optional<DocumentDto> sendMessage(final DocumentDto documentDto);
 
     /**
+     * используется для получение списка всех DTO-объектов из очереди брокера сообщений.
+     *
+     *@return список DTO-объектов;
+     */
+
+    List<DocumentDto> getAllMessages ();
+
+    /**
      * используется для получение списка всех DTO-объектов из временного хранилища.
      *
      *@return список DTO-объектов;

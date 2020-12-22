@@ -9,8 +9,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.BrowserCallback;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.QueueBrowser;
+import javax.jms.Session;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -36,6 +45,29 @@ public class JmsProducerServiceImpl implements JmsProducerService {
     public void send(final DocumentDto documentDto) {
         jmsTemplate.convertAndSend(documentDto);
         log.info("--- sending: " + documentDto);
+    }
+
+    @Override
+    public List<DocumentDto> getAllMessages() {
+        //final Queue queue = (Queue) jmsTemplate.getDefaultDestination();
+
+        return jmsTemplate.browse("kuiQueue", new BrowserCallback<List<DocumentDto>>() {
+            @Override
+            public List<DocumentDto> doInJms(Session session, QueueBrowser browser) throws JMSException {
+                List<DocumentDto> documentDtos = new ArrayList<>();
+
+                Enumeration enumeration = browser.getEnumeration();
+
+                while (enumeration.hasMoreElements()) {
+                    Message msg = (Message) enumeration.nextElement();
+
+                    documentDtos.add((DocumentDto) jmsTemplate.getMessageConverter().fromMessage(msg));
+
+                    log.info("--- documentDto from kuiQueue: "+ msg);
+                }
+                return documentDtos;
+            }
+        });
     }
 
     public void isJmsAlive() {

@@ -37,6 +37,17 @@ public class JmsController {
         return "sender";
     }
 
+    @GetMapping({"/all"})
+    public String allMessages(Model model) {
+
+        jmsSenderService.getAllMessages();
+
+        model.addAttribute("formData", new FormData(new DocumentDto()));
+        model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());
+
+        return "sender";
+    }
+
     @PostMapping("/sender")
     public String submitDocument(@Valid FormData formData,
                                  BindingResult bindingResult,

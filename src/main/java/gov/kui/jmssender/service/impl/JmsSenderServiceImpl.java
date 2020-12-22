@@ -43,6 +43,11 @@ public class JmsSenderServiceImpl implements JmsSenderService {
     }
 
     @Override
+    public List<DocumentDto> getAllMessages() {
+        return jmsProducerService.getAllMessages();
+    }
+
+    @Override
     public void isAvailable() {
         jmsProducerService.isJmsAlive(); //todo придумать проверку временного хранилища
     }

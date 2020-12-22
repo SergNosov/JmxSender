@@ -1,10 +1,13 @@
 package gov.kui.jmssender.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.service.JmsProducerService;
 import gov.kui.jmssender.util.JmsSenderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -31,6 +34,10 @@ public class JmsProducerServiceImpl implements JmsProducerService {
     private final String password;
 
     @Autowired
+    @Qualifier("jmsSenderObjectMapper")
+    private ObjectMapper jmsSenderObjectMapper;
+
+    @Autowired
     public JmsProducerServiceImpl(JmsTemplate jmsTemplate,
                                   @Value("${artemis.host.jolokia}") String artemisHostJolokia,
                                   @Value("${artemis.user}") String login,
@@ -45,6 +52,13 @@ public class JmsProducerServiceImpl implements JmsProducerService {
     public void send(final DocumentDto documentDto) {
         jmsTemplate.convertAndSend(documentDto);
         log.info("--- sending: " + documentDto);
+
+        //todo jmsSenderObjectMapper сейчас не работает в messageconverter
+        try {
+            log.info("--- converting: "+ jmsSenderObjectMapper.writeValueAsString(documentDto));
+        } catch (JsonProcessingException e) {
+            log.error("--- error: "+e.getMessage());
+        }
     }
 
     @Override

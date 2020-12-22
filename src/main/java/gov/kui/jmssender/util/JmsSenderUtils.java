@@ -24,8 +24,8 @@ public class JmsSenderUtils {
                     new HttpEntity<String>(httpHeaders),
                     String.class
             );
-        } catch (ResourceAccessException conEx){
-            return new ResponseEntity<String>(conEx.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
+        } catch (Exception ex){
+            return new ResponseEntity<String>(ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 

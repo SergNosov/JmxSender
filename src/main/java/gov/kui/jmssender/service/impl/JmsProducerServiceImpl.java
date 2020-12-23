@@ -4,7 +4,6 @@ import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.service.JmsProducerService;
 import gov.kui.jmssender.util.JmsSenderUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.Queue;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -28,16 +26,18 @@ public class JmsProducerServiceImpl implements JmsProducerService {
     private final String artemisHostJolokia;
     private final String login;
     private final String password;
+    private final String destinationQueue;
 
     public JmsProducerServiceImpl(JmsTemplate jmsTemplate,
                                   @Value("${artemis.host.jolokia}") String artemisHostJolokia,
                                   @Value("${artemis.user}") String login,
-                                  @Value("${artemis.password}") String password
-    ) {
+                                  @Value("${artemis.password}") String password,
+                                  @Value("${jms.queue.destination}") String destinationQueue) {
         this.jmsTemplate = jmsTemplate;
         this.artemisHostJolokia = artemisHostJolokia;
         this.login = login;
         this.password = password;
+        this.destinationQueue = destinationQueue;
     }
 
     public void isJmsAlive() {
@@ -65,15 +65,13 @@ public class JmsProducerServiceImpl implements JmsProducerService {
     }
 
     public List<DocumentDto> getAllMessages() {
-        final Queue queue = (Queue) jmsTemplate.getDefaultDestination();
-
-        return jmsTemplate.browse(queue, (session, browser) -> {
+        return jmsTemplate.browse( this.destinationQueue, (session, browser) -> {
 
             List<DocumentDto> documentDtos = new ArrayList<>();
-            Enumeration enumeration = browser.getEnumeration();
+            Enumeration<Message> enumeration = browser.getEnumeration();
 
             while (enumeration.hasMoreElements()) {
-                Message msg = (Message) enumeration.nextElement();
+                Message msg = enumeration.nextElement();
                 log.info("--- Message from kuiQueue: " + msg);
 
                 Optional<DocumentDto> dtoFromMessage = convertMsgToDocumentDto(msg);

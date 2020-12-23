@@ -40,7 +40,7 @@ public class JmsController {
     @GetMapping({"/all"})
     public String allMessages(Model model) {
 
-        jmsSenderService.getAllMessages();
+        log.info("--- listDto from Message: "+jmsSenderService.getAllMessages());
 
         model.addAttribute("formData", new FormData(new DocumentDto()));
         model.addAttribute("documentDtoList", jmsSenderService.getAllDtos());

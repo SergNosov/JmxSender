@@ -1,28 +1,24 @@
 package gov.kui.jmssender.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.kui.jmssender.model.DocumentDto;
 import gov.kui.jmssender.service.JmsProducerService;
 import gov.kui.jmssender.util.JmsSenderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jms.core.BrowserCallback;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.QueueBrowser;
-import javax.jms.Session;
+import javax.jms.Queue;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -33,11 +29,6 @@ public class JmsProducerServiceImpl implements JmsProducerService {
     private final String login;
     private final String password;
 
-    @Autowired
-    @Qualifier("jmsSenderObjectMapper")
-    private ObjectMapper jmsSenderObjectMapper;
-
-    @Autowired
     public JmsProducerServiceImpl(JmsTemplate jmsTemplate,
                                   @Value("${artemis.host.jolokia}") String artemisHostJolokia,
                                   @Value("${artemis.user}") String login,
@@ -47,41 +38,6 @@ public class JmsProducerServiceImpl implements JmsProducerService {
         this.artemisHostJolokia = artemisHostJolokia;
         this.login = login;
         this.password = password;
-    }
-
-    public void send(final DocumentDto documentDto) {
-        jmsTemplate.convertAndSend(documentDto);
-        log.info("--- sending: " + documentDto);
-
-        //todo jmsSenderObjectMapper сейчас не работает в messageconverter
-        try {
-            log.info("--- converting: "+ jmsSenderObjectMapper.writeValueAsString(documentDto));
-        } catch (JsonProcessingException e) {
-            log.error("--- error: "+e.getMessage());
-        }
-    }
-
-    @Override
-    public List<DocumentDto> getAllMessages() {
-        //final Queue queue = (Queue) jmsTemplate.getDefaultDestination();
-
-        return jmsTemplate.browse("kuiQueue", new BrowserCallback<List<DocumentDto>>() {
-            @Override
-            public List<DocumentDto> doInJms(Session session, QueueBrowser browser) throws JMSException {
-                List<DocumentDto> documentDtos = new ArrayList<>();
-
-                Enumeration enumeration = browser.getEnumeration();
-
-                while (enumeration.hasMoreElements()) {
-                    Message msg = (Message) enumeration.nextElement();
-
-                    documentDtos.add((DocumentDto) jmsTemplate.getMessageConverter().fromMessage(msg));
-
-                    log.info("--- documentDto from kuiQueue: "+ msg);
-                }
-                return documentDtos;
-            }
-        });
     }
 
     public void isJmsAlive() {
@@ -100,6 +56,45 @@ public class JmsProducerServiceImpl implements JmsProducerService {
             log.info("--- JMS Брокер ActiveMQ Artemis. Проверка соединения: " + "\n" +
                     "--- HttpStatus: " + response.getStatusCode() + "\n" +
                     "--- ResponseBody: " + response.getBody() + "\n");
+        }
+    }
+
+    public void send(final DocumentDto documentDto) {
+        jmsTemplate.convertAndSend(documentDto);
+        log.info("--- sending: " + documentDto);
+    }
+
+    public List<DocumentDto> getAllMessages() {
+        final Queue queue = (Queue) jmsTemplate.getDefaultDestination();
+
+        return jmsTemplate.browse(queue, (session, browser) -> {
+
+            List<DocumentDto> documentDtos = new ArrayList<>();
+            Enumeration enumeration = browser.getEnumeration();
+
+            while (enumeration.hasMoreElements()) {
+                Message msg = (Message) enumeration.nextElement();
+                log.info("--- Message from kuiQueue: " + msg);
+
+                Optional<DocumentDto> dtoFromMessage = convertMsgToDocumentDto(msg);
+
+                if (dtoFromMessage.isPresent()) {
+                    documentDtos.add(dtoFromMessage.get());
+                    log.info("--- documentDto from kuiQueue: " + dtoFromMessage.get());
+                }
+            }
+            return documentDtos;
+        });
+    }
+
+    private Optional<DocumentDto> convertMsgToDocumentDto(Message msg) {
+        try {
+            DocumentDto dtoFromMessage = (DocumentDto) jmsTemplate.getMessageConverter().fromMessage(msg);
+            return Optional.of(dtoFromMessage);
+        } catch (JMSException | ClassCastException ex) {
+            log.error("--- не удалось конвертировать сообщение в объект DocumentDto. Exception: " + ex.getMessage());
+            ex.printStackTrace();
+            return Optional.empty();
         }
     }
 }

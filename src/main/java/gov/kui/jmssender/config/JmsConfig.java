@@ -46,14 +46,29 @@ public class JmsConfig {
     public JmsTemplate jmsTemplate(AtomikosConnectionFactoryBean  jmsSenderConnectionFactoryBean,
                                    MessageConverter messageConverter,
                                    Destination queue) {
+
         JmsTemplate jmsTemplate = new JmsTemplate(jmsSenderConnectionFactoryBean);
         jmsTemplate.setDefaultDestination(queue);
         jmsTemplate.setMessageConverter(messageConverter);
+
         return jmsTemplate;
     }
 
     @Bean
+    public MessageConverter messageConverter(@Qualifier("jmsSenderObjectMapper")
+                                                         ObjectMapper jmsSenderObjectMapper){
+
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setObjectMapper(jmsSenderObjectMapper);
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("_type");
+
+        return converter;
+    }
+
+    @Bean
     public ObjectMapper jmsSenderObjectMapper(){
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, true);
@@ -64,16 +79,7 @@ public class JmsConfig {
     }
 
     @Bean
-    public MessageConverter messageConverter(){
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setTargetType(MessageType.TEXT);
-        converter.setTypeIdPropertyName("_type");
-        return converter;
-    }
-
-    @Bean
     public ActiveMQQueue queue(){
-        ActiveMQQueue queue = new ActiveMQQueue(destinationQueue);
-        return  queue;
+        return new ActiveMQQueue(destinationQueue);
     }
 }

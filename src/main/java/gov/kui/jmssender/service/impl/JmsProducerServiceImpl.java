@@ -9,10 +9,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.stereotype.Service;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.QueueBrowser;
+import javax.jms.Session;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -65,32 +68,33 @@ public class JmsProducerServiceImpl implements JmsProducerService {
     }
 
     public List<DocumentDto> getAllMessages() {
-        return jmsTemplate.browse( this.destinationQueue, (session, browser) -> {
 
-            List<DocumentDto> documentDtos = new ArrayList<>();
+        return this.jmsTemplate.browse(this.destinationQueue, this::doInJms);
+    }
+
+    private  List<DocumentDto> doInJms(Session session, QueueBrowser browser) {
+        List<DocumentDto> documentDtos = new ArrayList<>();
+        try {
             Enumeration<Message> enumeration = browser.getEnumeration();
 
             while (enumeration.hasMoreElements()) {
                 Message msg = enumeration.nextElement();
-                log.info("--- Message from kuiQueue: " + msg);
-
-                Optional<DocumentDto> dtoFromMessage = convertMsgToDocumentDto(msg);
-
-                if (dtoFromMessage.isPresent()) {
-                    documentDtos.add(dtoFromMessage.get());
-                    log.info("--- documentDto from kuiQueue: " + dtoFromMessage.get());
-                }
+                this.convertMsgToDocumentDto(msg).ifPresent(documentDtos::add);
             }
-            return documentDtos;
-        });
+        } catch (JMSException e) {
+            log.error("--- doInJms(). Не удалось получить Enumeration<Message>: "+e.getMessage());
+            throw new RuntimeException("Не удалось получить Enumeration<Message>: "+ e);
+        }
+
+        return documentDtos;
     }
 
     private Optional<DocumentDto> convertMsgToDocumentDto(Message msg) {
         try {
             DocumentDto dtoFromMessage = (DocumentDto) jmsTemplate.getMessageConverter().fromMessage(msg);
             return Optional.of(dtoFromMessage);
-        } catch (JMSException | ClassCastException ex) {
-            log.error("--- не удалось конвертировать сообщение в объект DocumentDto. Exception: " + ex.getMessage());
+        } catch (JMSException | MessageConversionException | ClassCastException ex) {
+            log.error("--- не удалось конвертировать сообщение в объект DocumentDto: " + ex.getMessage());
             ex.printStackTrace();
             return Optional.empty();
         }

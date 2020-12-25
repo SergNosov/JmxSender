@@ -59,6 +59,11 @@ public class JmsSenderConnectionFactoryBean extends AtomikosConnectionFactoryBea
                     "--- HttpStatus: " + response.getStatusCode() + "\n" +
                     "--- ResponseBody: " + response.getBody()+"\n");
             System.exit(-1000);
+        } else if (response.getStatusCode() == HttpStatus.OK && response.getBody().contains("error") ){
+            log.error("--- Ошибка. Проверьте настройки параметров запуска Java VM (-Dsun.net.http.allowRestrictedHeaders=true). " + "\n" +
+                    "--- HttpStatus: " + response.getStatusCode() + "\n" +
+                    "--- ResponseBody: " + response.getBody()+"\n");
+            System.exit(-1000);
         } else {
             log.info("--- JMS Брокер ActiveMQ Artemis. Проверка соединения: " + "\n" +
                     "--- HttpStatus: " + response.getStatusCode() + "\n" +

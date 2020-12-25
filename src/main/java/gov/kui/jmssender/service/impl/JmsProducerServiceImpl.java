@@ -55,6 +55,13 @@ public class JmsProducerServiceImpl implements JmsProducerService {
                     "--- HttpStatus: " + response.getStatusCode() + "\n" +
                     "--- ResponseBody: " + response.getBody() + "\n");
             throw new RuntimeException("--- Нет связи с брокером сообщений ActiveMQ Artemis: " + response.getBody());
+
+        } else if (response.getStatusCode() == HttpStatus.OK && response.getBody().contains("error")) {
+            log.error("--- Ошибка. Проверьте настройки параметров запуска Java VM (-Dsun.net.http.allowRestrictedHeaders=true). " + "\n" +
+                    "--- HttpStatus: " + response.getStatusCode() + "\n" +
+                    "--- ResponseBody: " + response.getBody() + "\n");
+            throw new RuntimeException("--- Ошибка. Проверьте настройки параметров запуска Java VM (-Dsun.net.http.allowRestrictedHeaders=true). " + response.getBody());
+
         } else {
             log.info("--- JMS Брокер ActiveMQ Artemis. Проверка соединения: " + "\n" +
                     "--- HttpStatus: " + response.getStatusCode() + "\n" +
@@ -72,7 +79,7 @@ public class JmsProducerServiceImpl implements JmsProducerService {
         return this.jmsTemplate.browse(this.destinationQueue, this::doInJms);
     }
 
-    private  List<DocumentDto> doInJms(Session session, QueueBrowser browser) {
+    private List<DocumentDto> doInJms(Session session, QueueBrowser browser) {
         List<DocumentDto> documentDtos = new ArrayList<>();
         try {
             Enumeration<Message> enumeration = browser.getEnumeration();
@@ -82,8 +89,8 @@ public class JmsProducerServiceImpl implements JmsProducerService {
                 this.convertMsgToDocumentDto(msg).ifPresent(documentDtos::add);
             }
         } catch (JMSException e) {
-            log.error("--- doInJms(). Не удалось получить Enumeration<Message>: "+e.getMessage());
-            throw new RuntimeException("Не удалось получить Enumeration<Message>: "+ e);
+            log.error("--- doInJms(). Не удалось получить Enumeration<Message>: " + e.getMessage());
+            throw new RuntimeException("Не удалось получить Enumeration<Message>: " + e);
         }
 
         return documentDtos;
